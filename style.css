@@ -339,9 +339,9 @@ svg {
     transform: translate(-50%, -50%);
   }
 
-  button {
-    left: 13.5%;
-    top: 60%;
+  .learn-more {
+    left: 14.7%;
+    top: 56%;
   }
 
   .media {
@@ -363,7 +363,7 @@ svg {
   .hero h2 {
     font-size: 20px;
     top: 50%;
-    left: 33.9%;
+    left: 29.9%;
   }
 }
 
