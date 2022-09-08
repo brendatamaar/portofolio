@@ -376,6 +376,10 @@ svg {
   margin-left: 0%;
 }
 
+.scroll-down {
+  margin-top: 50px;
+}
+
 .hero-content p {
   font-weight: lighter;
   line-height: 36px;
