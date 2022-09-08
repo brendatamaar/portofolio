@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="harrnish" />
+
+    <title>Portfolio Website Template | CODEGRID</title>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- bootstrap cdns -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- IONICONS -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+
+    <!-- terminal effect -->
+    <script src="t.min.js"></script>
+
+    <!-- for on scroll animations -->
+    <link rel="stylesheet" href="animate.css" />
+    <script src="wow.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!--------------- navbar starts here --------------->
+      <nav>
+        <span id="brand">
+          <a role="link" aria-disabled="true">ba</a>
+        </span>
+
+        <ul id="menu">
+          <li>
+            <a href="#about">about me<span>.</span></a>
+          </li>
+          <li>
+            <a href="#work">work<span>.</span></a>
+          </li>
+          <li>
+            <a href="#contact">contact<span>.</span></a>
+          </li>
+        </ul>
+
+        <div id="toggle">
+          <div class="span">menu</div>
+        </div>
+      </nav>
+
+      <div id="resize">
+        <div class="close-btn">close</div>
+
+        <ul id="menu">
+          <li>
+            <a href="#about">about me<span>.</span></a>
+          </li>
+          <li>
+            <a href="#work">work<span>.</span></a>
+          </li>
+          <li>
+            <a href="#contact">contact<span>.</span></a>
+          </li>
+        </ul>
+      </div>
+      <!--------------- navbar ends here --------------->
+
+      <!-- SOCIAL MEDIA ICONS -->
+      <div class="media">
+        <ul>
+          <li>
+            <a href="mailto:brendatama10@gmail.com"
+              ><ion-icon name="mail"></ion-icon
+            ></a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/brendatamaar/" target="_blank"
+              ><ion-icon name="logo-linkedin"></ion-icon
+            ></a>
+          </li>
+          <li>
+            <a href="https://github.com/brendatamaar" target="_blank"
+              ><ion-icon name="logo-github"></ion-icon
+            ></a>
+          </li>
+          <li>
+            <a href="https://www.behance.net/brendatamaar" target="_blank"
+              ><ion-icon name="logo-behance"></ion-icon
+            ></a>
+          </li>
+        </ul>
+      </div>
+
+      <!--------------- hero section starts here --------------->
+      <div class="hero">
+        <div class="header">
+          <h1>Brendatama Akbar<br /></h1>
+          <h2>Develop. Design.</h2>
+          <button class="learn-more">
+            <a href="#about"
+              ><span class="circle" aria-hidden="true">
+                <span class="icon arrow"></span>
+              </span>
+              <span class="button-text">Learn More</span>
+            </a>
+          </button>
+          <div class="wrapper">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              viewBox="0 0 288 288"
+            >
+              <linearGradient
+                id="PSgrad_0"
+                x1="70.711%"
+                x2="0%"
+                y1="70.711%"
+                y2="0%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="rgb(95,54,152)"
+                  stop-opacity="1"
+                />
+                <stop
+                  offset="100%"
+                  stop-color="rgb(247,109,138)"
+                  stop-opacity="1"
+                />
+              </linearGradient>
+              <path fill="url(#PSgrad_0)">
+                <animate
+                  repeatCount="indefinite"
+                  attributeName="d"
+                  dur="5s"
+                  values="M37.5,186c-12.1-10.5-11.8-32.3-7.2-46.7c4.8-15,13.1-17.8,30.1-36.7C91,68.8,83.5,56.7,103.4,45 c22.2-13.1,51.1-9.5,69.6-1.6c18.1,7.8,15.7,15.3,43.3,33.2c28.8,18.8,37.2,14.3,46.7,27.9c15.6,22.3,6.4,53.3,4.4,60.2 c-3.3,11.2-7.1,23.9-18.5,32c-16.3,11.5-29.5,0.7-48.6,11c-16.2,8.7-12.6,19.7-28.2,33.2c-22.7,19.7-63.8,25.7-79.9,9.7 c-15.2-15.1,0.3-41.7-16.6-54.9C63,186,49.7,196.7,37.5,186z; M51,171.3c-6.1-17.7-15.3-17.2-20.7-32c-8-21.9,0.7-54.6,20.7-67.1c19.5-12.3,32.8,5.5,67.7-3.4C145.2,62,145,49.9,173,43.4 c12-2.8,41.4-9.6,60.2,6.6c19,16.4,16.7,47.5,16,57.7c-1.7,22.8-10.3,25.5-9.4,46.4c1,22.5,11.2,25.8,9.1,42.6 c-2.2,17.6-16.3,37.5-33.5,40.8c-22,4.1-29.4-22.4-54.9-22.6c-31-0.2-40.8,39-68.3,35.7c-17.3-2-32.2-19.8-37.3-34.8 C48.9,198.6,57.8,191,51,171.3z; M37.5,186c-12.1-10.5-11.8-32.3-7.2-46.7c4.8-15,13.1-17.8,30.1-36.7C91,68.8,83.5,56.7,103.4,45 c22.2-13.1,51.1-9.5,69.6-1.6c18.1,7.8,15.7,15.3,43.3,33.2c28.8,18.8,37.2,14.3,46.7,27.9c15.6,22.3,6.4,53.3,4.4,60.2 c-3.3,11.2-7.1,23.9-18.5,32c-16.3,11.5-29.5,0.7-48.6,11c-16.2,8.7-12.6,19.7-28.2,33.2c-22.7,19.7-63.8,25.7-79.9,9.7 c-15.2-15.1,0.3-41.7-16.6-54.9C63,186,49.7,196.7,37.5,186z	"
+                />
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-down" id="about"></div>
+      <!--------------- hero section ends here --------------->
+
+      <div class="container">
+        <div class="hero-content">
+          <br /><br />
+
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="wow fadeInUp" data-wow-delay="1.2s">about me.</h3>
+              <br />
+
+              <p class="wow fadeInUp">
+                Hi, My name is Brendatama Akbar Ramadan. A software developer
+                based in Bekasi, Indonesia.
+              </p>
+
+              <p class="wow fadeInUp" data-wow-delay="0.2s">
+                I work as a software developer specializing in designing and
+                building the application. Over the past year, I am passionate
+                about working in the IT industry. I love creating apps. Ever
+                since creating my first program, I was so interested in the idea
+                to solve problems using the software. I love designing a
+                prototype to building the applications, and I believe we can
+                transform and improve our daily lives with programming.
+              </p>
+            </div>
+          </div>
+          <br />
+          <div class="hr">
+            <div class="row"></div>
+          </div>
+        </div>
+      </div>
+
+      <!--------------- projects section starts here --------------->
+      <div class="container" id="work">
+        <br /><br />
+        <h3 class="wow fadeInUp" data-wow-delay="1.2s">selected projects.</h3>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="project-container">
+              <div class="project">
+                <div class="project__item wow fadeInUp" data-wow-delay="0.2s">
+                  <a class="project__item-link">/ Englishseed</a>
+                  <img class="menu__item-img" src="images/englishseed.png" />
+                  <img
+                    class="menu_item-img_mobile"
+                    src="images/englishseed.png"
+                  />
+                  <p class="project_desc">
+                    an english online class website for children.
+                  </p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="project__item wow fadeInUp" data-wow-delay="0.4s">
+                  <a class="project__item-link">/ SEWA-GI</a>
+                  <img class="menu__item-img" src="images/sewagi.png" />
+                  <img class="menu_item-img_mobile" src="images/sewagi.png" />
+                  <p class="project_desc">
+                    a platform for helping renters find affordable homes and
+                    guiding property owners in generating optimised rental
+                    payments.
+                  </p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="project__item wow fadeInUp" data-wow-delay="0.6s">
+                  <a class="project__item-link">/ TRANSLIGHT</a>
+                  <img class="menu__item-img" src="images/translight.jpg" />
+                  <img
+                    class="menu_item-img_mobile"
+                    src="images/translight.jpg"
+                  />
+                  <p class="project_desc">
+                    an app to provide car pick-up and rental services.
+                  </p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="project__item wow fadeInUp" data-wow-delay="0.8s">
+                  <a class="project__item-link">/ Tratus</a>
+
+                  <img class="menu__item-img" src="images/tratus.png" />
+                  <img class="menu_item-img_mobile" src="images/tratus.png" />
+                  <p class="project_desc">
+                    an app that provides informations about tourist attractions
+                    in West Java.
+                  </p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="project__item wow fadeInUp" data-wow-delay="1.0s">
+                  <a class="project__item-link">/ RRW</a>
+                  <img class="menu__item-img" src="images/rrw.jpg" />
+                  <img class="menu_item-img_mobile" src="images/rrw.jpg" />
+                  <p class="project_desc">
+                    a tool to assist telemarketing team in recording and
+                    processing data.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="whitespace"></div>
+
+        <div class="hr">
+          <div class="row"></div>
+        </div>
+      </div>
+      <!--------------- projects section ends here --------------->
+
+      <!--------------- footer starts here --------------->
+      <div class="footer" id="contact">
+        <div class="container">
+          <br />
+          <br />
+
+          <div class="info">
+            <div class="row">
+              <div class="col-lg-6" id="personal">
+                <p class="wow fadeInUp">got an interesting project?</p>
+                <a href="mailto:brendatama10@gmail.com"
+                  ><button
+                    class="connect success wow fadeInUp"
+                    data-wow-delay="0.8s"
+                  >
+                    connect with me
+                  </button></a
+                >
+                <br /><br />
+              </div>
+
+              <div class="col-lg-6" id="media">
+                <p class="wow fadeInUp" data-wow-delay="0s">follow me</p>
+
+                <ul>
+                  <li id="lin" class="wow fadeInUp" data-wow-delay="0.4s"><a href="https://www.linkedin.com/in/brendatamaar/" target="_blank">linkedin</a></li>
+                  <li id="gi" class="wow fadeInUp" data-wow-delay="0.6s"><a href="https://github.com/brendatamaar" target="_blank">github</a></li>
+                  <li id="be" class="wow fadeInUp" data-wow-delay="0.8s"><a href="https://www.behance.net/brendatamaar" target="_blank">behance</a></li>
+                </ul>
+
+                <br /><br />
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div class="hr">
+            <div class="row"></div>
+          </div>
+        </div>
+      </div>
+      <!--------------- footer ends here --------------->
+
+      <br /><br /><br /><br />
+    </div>
+
+    <!-- greensock cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+      // navigation starts here
+
+      $("#toggle").click(function () {
+        $(this).toggleClass("on");
+        $("#resize").toggleClass("active");
+      });
+
+      $("#resize ul li a").click(function () {
+        $(this).toggleClass("on");
+        $("#resize").toggleClass("active");
+      });
+
+      $(".close-btn").click(function () {
+        $(this).toggleClass("on");
+        $("#resize").toggleClass("active");
+      });
+
+      // navigation ends here
+
+      // nav animation
+
+      TweenMax.from("#brand", 1, {
+        delay: 0.4,
+        y: 10,
+        opacity: 0,
+        ease: Expo.easeInOut,
+      });
+
+      TweenMax.staggerFrom(
+        "#menu li a",
+        1,
+        {
+          delay: 0.4,
+          opacity: 0,
+          ease: Expo.easeInOut,
+        },
+        0.1
+      );
+
+      // nav animation ends
+
+      TweenMax.staggerFrom(
+        ".media ul li",
+        2,
+        {
+          y: 20,
+          opacity: 0,
+          ease: Expo.easeInOut,
+          delay: 1,
+        },
+        0.1
+      );
+
+      TweenMax.staggerFrom(
+        ".hero",
+        1,
+        { delay: 0.4, y: 100, opacity: 0, ease: Expo.easeOut },
+        0.1
+      );
+
+      new WOW().init();
+    </script>
+  </body>
+</html>
