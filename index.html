@@ -32,15 +32,17 @@
     <meta name="twitter:description" content="Brendatama AKbar website personal"/>
     <meta name="twitter:image" content="images/favicon/favicon.ico"/>
 
+    <!-- bootstrap cdns -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+    
     <!-- stylesheet -->
     <link rel="stylesheet" href="style.css" />
 
-    <!-- bootstrap cdns -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    />
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <!-- IONICONS -->
     <script
@@ -183,7 +185,7 @@
 
           <div class="row">
             <div class="col-lg-12">
-              <h3 class="wow fadeInUp" data-wow-delay="1.2s" id="about">about me.</h3>
+              <h3 class="wow fadeInUp" data-wow-delay="1.2s">about me.</h3>
               <br /><br />
 
               <p class="wow fadeInUp">
@@ -218,68 +220,187 @@
           <div class="col-lg-12">
             <div class="project-container">
               <div class="project">
-                <div class="project__item wow fadeInUp" data-wow-delay="0.2s">
+                <div class="project__item wow fadeInUp" data-wow-delay="0.2s"  data-toggle="modal" data-target="#modal1">
                   <a class="project__item-link">/ Englishseed</a>
-                  <img class="menu__item-img" src="images/englishseed.PNG" />
-                  <img
-                    class="menu_item-img_mobile"
-                    src="images/englishseed.PNG"
-                  />
-                  <p class="project_desc">
-                    an english online class website for children.
-                  </p>
+                  
+                  <div class="marquee">
+										<div class="marquee__inner">
+											<span>Englishseed</span>
+											<span>Englishseed</span>
+											<span>Englishseed</span>
+											<span>Englishseed</span>
+										</div>
+									</div>
+
+                  <div class="modal fade bd-example-modal-lg" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <img src="images/englishseed.PNG" />
+                          
+                        <div class="modal-body">
+                          <h3>Englishseed</h3>
+                          <p class="subtitle">an online English learning class for kindergarten and elementary school level children.</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="project__item wow fadeInUp" data-wow-delay="0.4s">
+                <div class="project__item wow fadeInUp" data-wow-delay="0.2s"  data-toggle="modal" data-target="#modal2">
                   <a class="project__item-link">/ SEWA-GI</a>
-                  <img class="menu__item-img" src="images/sewagi.PNG" />
-                  <img class="menu_item-img_mobile" src="images/sewagi.PNG" />
-                  <p class="project_desc">
-                    a platform for helping renters find affordable homes and
-                    guiding property owners in generating optimised rental
-                    payments.
-                  </p>
+                  
+                  <div class="marquee">
+										<div class="marquee__inner">
+											<span>SEWAGI</span>
+											<span>SEWAGI</span>
+											<span>SEWAGI</span>
+											<span>SEWAGI</span>
+										</div>
+									</div>
+
+                  <div class="modal fade bd-example-modal-lg" id="modal2" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <img src="images/sewagi.PNG" />
+                          
+                        <div class="modal-body">
+                          <h3>SEWA-GI</h3>
+                          <p class="subtitle">a platform for helping renters find affordable homes and guiding property owners in generating optimised rental payments. </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="project__item wow fadeInUp" data-wow-delay="0.6s">
-                  <a class="project__item-link">/ TRANSLIGHT</a>
-                  <img class="menu__item-img" src="images/translight.jpg" />
-                  <img
-                    class="menu_item-img_mobile"
-                    src="images/translight.jpg"
-                  />
-                  <p class="project_desc">
-                    an app to provide car pick-up and rental services.
-                  </p>
+                <div class="project__item wow fadeInUp" data-wow-delay="0.2s"  data-toggle="modal" data-target="#modal3">
+                  <a class="project__item-link">/ Translight</a>
+                  
+                  <div class="marquee">
+										<div class="marquee__inner">
+											<span>Translight</span>
+											<span>Translight</span>
+											<span>Translight</span>
+											<span>Translight</span>
+										</div>
+									</div>
+
+                  <div class="modal fade bd-example-modal-lg" id="modal3" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <img src="images/translight.png" />
+                          
+                        <div class="modal-body">
+                          <h3>Translight</h3>
+                          <p class="subtitle">an app providing car pick-up and rental services.</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="project__item wow fadeInUp" data-wow-delay="0.8s">
-                  <a class="project__item-link">/ Tratus</a>
+                <div class="project__item wow fadeInUp" data-wow-delay="0.2s"  data-toggle="modal" data-target="#modal4">
+                  <a class="project__item-link">/ TRATUS</a>
+                  
+                  <div class="marquee">
+										<div class="marquee__inner">
+											<span>TRATUS</span>
+											<span>TRATUS</span>
+											<span>TRATUS</span>
+											<span>TRATUS</span>
+										</div>
+									</div>
 
-                  <img class="menu__item-img" src="images/tratus.png" />
-                  <img class="menu_item-img_mobile" src="images/tratus.png" />
-                  <p class="project_desc">
-                    an app that provides informations about tourist attractions
-                    in West Java.
-                  </p>
+                  <div class="modal fade bd-example-modal-lg" id="modal4" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <img src="images/tratus.png" />
+                          
+                        <div class="modal-body">
+                          <h3>Translight</h3>
+                          <p class="subtitle">an app that provides informations about tourist attractions in West Java. </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
 
                 <div class="divider"></div>
 
-                <div class="project__item wow fadeInUp" data-wow-delay="1.0s">
+                <div class="project__item wow fadeInUp" data-wow-delay="0.2s"  data-toggle="modal" data-target="#modal5">
                   <a class="project__item-link">/ RRW</a>
-                  <img class="menu__item-img" src="images/rrw.jpg" />
-                  <img class="menu_item-img_mobile" src="images/rrw.jpg" />
-                  <p class="project_desc">
-                    a tool to assist telemarketing team in recording and
-                    processing data.
-                  </p>
+                  
+                  <div class="marquee">
+										<div class="marquee__inner">
+											<span>RRW</span>
+											<span>RRW</span>
+											<span>RRW</span>
+											<span>RRW</span>
+										</div>
+									</div>
+
+                  <div class="modal fade bd-example-modal-lg" id="modal5" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <img src="images/rrw.png" />
+                          
+                        <div class="modal-body">
+                          <h3>RRW</h3>
+                          <p class="subtitle">a tool to assist telemarketing team in recording and processing data. </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
             </div>
