@@ -189,7 +189,7 @@ nav #menu li a:hover {
 /*--------------- media --------------- */
 .media {
   position: absolute;
-  right: 0;
+  right: 38px;
   bottom: 0;
   margin: 42px;
   z-index: 1;
@@ -206,6 +206,7 @@ nav #menu li a:hover {
 .media ul li a {
   color: white;
 }
+
 
 /*--------------- hero section --------------- */
 .hero {
@@ -344,7 +345,20 @@ svg {
   }
 
   .media {
-    visibility: hidden;
+    display: block;
+    position: inherit;
+    margin: 0 0px -60px 0;
+  }
+
+  .media ul {
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    padding-left: 22px;
+  }
+
+  .media ul li {
+    margin: 0px 10px 0px 0px;
   }
 
   svg {
