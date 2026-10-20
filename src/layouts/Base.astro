@@ -1,0 +1,97 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { site } from '../data/site';
+import Loader from '../components/Loader.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/tokens.css';
+import '../styles/engine.css';
+import '../styles/site.css';
+
+export type Current = 'home' | 'work' | 'blog' | 'none';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string; // absolute or root-relative OG image (1200x630)
+  type?: 'website' | 'article';
+  current?: Current;
+  progress?: boolean; // reading progress bar in the header (posts)
+  schema?: Record<string, unknown>; // extra JSON-LD for this page
+}
+const { title, description = site.description, image = '/og.png', type = 'website', current = 'none', progress = false, schema } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name}, ${site.role.toLowerCase()}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL(image, Astro.site ?? site.url).href;
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.role,
+  url: site.url,
+  email: `mailto:${site.email}`,
+  sameAs: site.socials.filter((s) => s.href.startsWith('http')).map((s) => s.href),
+};
+---
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#e9ebee" />
+    <meta name="author" content={site.name} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name}, blog`} href="/rss.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    <link rel="preload" href="/fonts/archivo-100_900-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jb-mono-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Before first paint: flag JS + motion so hidden-until-revealed states never flash. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
+    </script>
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="curtain" transition:persist="curtain" aria-hidden="true">
+      <div class="curtain__panel"></div>
+      <div class="curtain__req">
+        <span class="mono">GET</span>
+        <span class="mono curtain__path" data-req-path>/</span>
+        <span class="mono curtain__status" data-req-status></span>
+        <span class="curtain__bar"><span></span></span>
+      </div>
+    </div>
+    <Loader />
+    <Header current={current} progress={progress} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import { start } from '../engine/astro';
+      import { setupMotion } from '../motion/setup';
+      start(setupMotion);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+---
+import { type Post, isoDate, minutes } from '../lib/posts';
+interface Props {
+  posts: Post[];
+  full?: boolean; // show descriptions and tags (blog index)
+  headingLevel?: 2 | 3;
+}
+const { posts, full = false, headingLevel = 3 } = Astro.props;
+const H = `h${headingLevel}` as 'h2' | 'h3';
+---
+<ol class:list={['posts', { 'posts--full': full }]}>
+  {posts.map((post) => (
+    <li class="post-row">
+      <a class="post-row__link" href={`/blog/${post.id}/`}>
+        <time class="post-row__date mono" datetime={post.data.date.toISOString()}>{isoDate(post.data.date)}</time>
+        <H class="post-row__title">{post.data.title}</H>
+        {full && <p class="post-row__desc">{post.data.description}</p>}
+        <span class="post-row__meta mono">{minutes(post)} min read</span>
+        <span class="post-row__line" aria-hidden="true"></span>
+      </a>
+    </li>
+  ))}
+</ol>

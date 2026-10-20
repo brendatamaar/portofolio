@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Waterfall from '../components/Waterfall.astro';
+import WorkIndex from '../components/WorkIndex.astro';
+import PostList from '../components/PostList.astro';
+import { site, statement, about } from '../data/site';
+import { allPosts } from '../lib/posts';
+const [first, last] = site.name.split(' ');
+const posts = (await allPosts()).slice(0, 3);
+---
+<Base current="home">
+  <section class="hero" aria-labelledby="hero-name">
+    <h1 id="hero-name" class="hero__name" data-split="chars" data-intro>
+      <span class="hero__line">{first}</span>
+      <span class="hero__line hero__line--2">{last}</span>
+    </h1>
+    <div class="hero__meta">
+      <p class="hero__intro" data-split="lines" data-intro data-delay="0.35"><strong>{site.role}.</strong> {site.intro}</p>
+      <p class="hero__loaded mono" data-loaded aria-live="off"></p>
+    </div>
+    <Waterfall variant="hero" />
+  </section>
+
+  <section class="statement" aria-label="How I work">
+    <p class="statement__text" data-split="lines">
+      {statement.text} This is <a class="link" href={statement.link.href}>{statement.link.label}</a>.
+    </p>
+  </section>
+
+  <WorkIndex />
+
+  <section class="log" aria-labelledby="log-title">
+    <div class="log__head">
+      <h2 id="log-title" class="section-title" data-split="lines">Blog</h2>
+      <p class="log__note">Notes on fast pages and boring, reliable back ends.</p>
+      <a class="arrow-link" href="/blog/"><span>All posts</span><span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+    <div class="log__list">
+      <PostList posts={posts} />
+    </div>
+  </section>
+
+  <section class="about" id="about" aria-labelledby="about-title">
+    <h2 id="about-title" class="section-title" data-split="lines">About</h2>
+    <div class="about__bio">
+      {about.bio.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="about__lists">
+      <div>
+        <h3 class="about__h">What I do</h3>
+        <ul>{about.services.map((s) => <li>{s}</li>)}</ul>
+      </div>
+      <div>
+        <h3 class="about__h">What I use</h3>
+        <ul class="about__tools">{about.tools.map((s) => <li>{s}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+</Base>

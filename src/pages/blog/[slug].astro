@@ -1,0 +1,53 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { allPosts, isoDate, longDate, minutes, words } from '../../lib/posts';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await allPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, next: posts[i + 1] ?? posts[0] },
+  }));
+}
+const { post, next } = Astro.props;
+const { Content } = await render(post);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Person', name: site.name, url: site.url },
+  wordCount: words(post),
+  keywords: post.data.tags.join(', '),
+};
+---
+<Base title={post.data.title} description={post.data.description} type="article" current="blog" progress schema={schema}>
+  <article class="post">
+    <header class="post__head">
+      <p class="post__meta mono">
+        <time datetime={post.data.date.toISOString()} title={longDate(post.data.date)}>{isoDate(post.data.date)}</time>
+        <span>{minutes(post)} min read</span>
+        <span>{words(post).toLocaleString('en-US')} words</span>
+      </p>
+      <h1 class="post__title" data-split="lines" data-intro>{post.data.title}</h1>
+      <p class="post__lede" data-reveal="fade" data-intro data-delay="0.3">{post.data.description}</p>
+      {post.data.tags.length > 0 && (
+        <ul class="post__tags mono" aria-label="Tags">{post.data.tags.map((t) => <li>{t}</li>)}</ul>
+      )}
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <nav class="next next--post" aria-label="Next post">
+      <a class="next__link" href={`/blog/${next.id}/`}>
+        <span class="next__label mono">Next post</span>
+        <span class="next__title next__title--post">{next.data.title}</span>
+        <span class="next__kind">{minutes(next)} min read</span>
+        <span class="next__track" aria-hidden="true"><span></span></span>
+      </a>
+    </nav>
+  </article>
+</Base>

@@ -1,0 +1,17 @@
+---
+// First-load moment: this page's real requests, drawn as they arrive. On the home page the table
+// then moves into the hero, where the same rows are waiting. Engine hooks: [data-loader-count],
+// [data-loader-bar], [data-loader-out].
+import Waterfall from './Waterfall.astro';
+const path = Astro.url.pathname;
+---
+<div id="loader" role="status" aria-label="Loading">
+  <div class="loader__top" data-loader-out>
+    <span class="mono">GET {path}</span>
+    <span class="mono loader__count" data-loader-count>0000 ms</span>
+  </div>
+  <div class="loader__wf">
+    <Waterfall variant="loader" />
+  </div>
+  <div class="loader__bar" data-loader-bar data-loader-out></div>
+</div>

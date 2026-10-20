@@ -1,0 +1,24 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer" id="contact">
+  <div class="footer__lead">
+    <h2 class="footer__title">Have a slow page or a new app?</h2>
+    <p class="footer__note">{site.availability}</p>
+  </div>
+  <a class="cta" href={`mailto:${site.email}`}>
+    <span class="cta__fill" aria-hidden="true"></span>
+    <span class="cta__label">Email me</span>
+    <span class="cta__addr mono">{site.email}</span>
+  </a>
+  <div class="footer__base">
+    <ul class="footer__social">
+      {site.socials.map((s) => <li><a class="utility" href={s.href} rel={s.href.startsWith('http') ? 'me noopener' : undefined}>{s.label}</a></li>)}
+    </ul>
+    <p class="footer__colophon">
+      Set in Archivo and JetBrains Mono. Built with Astro.{' '}<span data-colophon></span>
+    </p>
+    <p class="footer__copy">© {year} {site.name}</p>
+  </div>
+</footer>
