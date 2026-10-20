@@ -179,5 +179,10 @@ its tilt); cards lift 6px and tilt -0.6deg on hover while the arrow turns 45 deg
 travel; navigation is four type-colored bands streaming in like waterfall rows, then the real
 status and fetch time. Idle: the badge's ring turns, the "you" row grows and its clock ticks.
 
-**Not copied from the reference:** stock photos, testimonials and invented stats. The stat cards
-show this page's real request count and transfer size.
+**Not copied from the reference:** stock photos, testimonials and invented stats.
+
+**Copy (v2.1):** all profile, work, education, skills and project copy now comes from the owner's
+live portfolio (brendatamaar/portfolio). Sections follow its labels: What I've built (Projects),
+Where I've worked (Work), What I've been thinking (Writing), Let's talk (Connect). The invented
+case studies, method steps and FAQ were removed. Project pages show only real fields: summary,
+detail (translated from the owner's longer Indonesian copy), stack, screenshot and link.

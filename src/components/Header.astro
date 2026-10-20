@@ -8,9 +8,10 @@ interface Props {
 }
 const { current, progress } = Astro.props;
 const links = [
+  { label: 'Projects', href: '/#projects', key: 'projects' },
   { label: 'Work', href: '/#work', key: 'work' },
-  { label: 'Blog', href: '/blog/', key: 'blog' },
-  { label: 'About', href: '/#about', key: 'about' },
+  { label: 'Writing', href: '/blog/', key: 'blog' },
+  { label: 'Connect', href: '/#connect', key: 'connect' },
 ];
 ---
 <header class="nav">
@@ -27,7 +28,7 @@ const links = [
         ))}
       </ul>
     </nav>
-    <a class="pill pill--light nav__cta" href={`mailto:${site.email}`}><span>Email me</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+    <a class="pill pill--light nav__cta" href={site.resume} download><span>Resume</span><span class="pill__arrow" aria-hidden="true">↓</span></a>
     {progress && <span class="nav__progress" aria-hidden="true"><span data-progress></span></span>}
   </div>
 </header>

@@ -18,7 +18,7 @@ npm run check      # type check
 
 | What | Where |
 |---|---|
-| Name, bio, links, projects | `src/data/site.ts` |
+| Profile, work, education, skills, projects | `src/data/site.ts` |
 | Blog posts (Markdown) | `src/content/blog/*.md` |
 | Pages | `src/pages/` (home, `work/[slug]`, `blog/`, `blog/[slug]`, `404`, `rss.xml`) |
 | Design tokens | `src/styles/tokens.css` |
@@ -30,13 +30,13 @@ To add a post, drop a Markdown file into `src/content/blog/` with `title`, `desc
 
 ## Before publishing
 
-Everything marked `placeholder: true` is invented and needs replacing:
+The profile, work history, education, skills and all eleven projects come from the live
+portfolio at https://www.brendatama.dev/ (`brendatamaar/portfolio`, `server/scripts/seed-resume.ts`).
+The project screenshots and the resume PDF come from that repo too. Still to replace:
 
-- `src/data/site.ts`: domain, email, LinkedIn URL, availability line, bio, services, tools,
-  and all four projects (they are examples of the case-study format, not real work).
-- `src/content/blog/*.md`: four drafts written in your voice. Edit, keep or delete them,
-  then remove `placeholder: true`.
-- `astro.config.mjs` (`site`) and `public/robots.txt`: the production URL.
+- `src/content/blog/*.md`: four drafts written in your voice. Your real posts live in the live
+  site's database, which is not in the repository; export them as Markdown into this folder.
+  Remove `placeholder: true` from any draft you keep.
 - `public/og.png`: regenerate after the content changes.
 
 ## Deploy

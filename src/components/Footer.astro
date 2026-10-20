@@ -3,17 +3,18 @@ import { site } from '../data/site';
 import Logo from './Logo.astro';
 const year = new Date().getFullYear();
 const links = [
+  { label: 'Projects', href: '/#projects' },
   { label: 'Work', href: '/#work' },
-  { label: 'Blog', href: '/blog/' },
-  { label: 'About', href: '/#about' },
-  { label: 'Email me', href: `mailto:${site.email}` },
+  { label: 'Writing', href: '/blog/' },
+  { label: 'Resume', href: site.resume },
+  { label: 'Send an email', href: `mailto:${site.email}` },
 ];
 ---
 <footer class="footer" id="contact">
   <div class="footer__top">
     <div class="footer__brand">
       <p class="footer__word" aria-hidden="true"><Logo class="footer__logo" /><span>Brendatama</span></p>
-      <p class="footer__about">{site.name}, web software developer. Fast web apps for slow phones and bad connections, built and measured end to end.</p>
+      <p class="footer__about">{site.role} based in {site.location}. Currently building web products at PLN Icon Plus.</p>
       <ul class="footer__social">
         {site.socials.map((s) => <li><a class="utility" href={s.href} rel={s.href.startsWith('http') ? 'me noopener' : undefined}>{s.label}</a></li>)}
       </ul>
@@ -25,7 +26,7 @@ const links = [
     </nav>
   </div>
   <div class="footer__base">
-    <p>© {year} {site.name}</p>
+    <p>© {year} {site.fullName}. {site.location}</p>
     <p class="footer__colophon">Set in Archivo and JetBrains Mono. Built with Astro.{' '}<span data-colophon></span></p>
   </div>
 </footer>

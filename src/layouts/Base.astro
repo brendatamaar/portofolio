@@ -19,14 +19,18 @@ interface Props {
   schema?: Record<string, unknown>; // extra JSON-LD for this page
 }
 const { title, description = site.description, image = '/og.png', type = 'website', current = 'none', progress = false, schema } = Astro.props;
-const fullTitle = title ? `${title} | ${site.name}` : `${site.name}, ${site.role.toLowerCase()}`;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name}, ${site.role} based in ${site.city}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL(image, Astro.site ?? site.url).href;
 const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: site.name,
+  name: site.fullName,
+  alternateName: site.name,
   jobTitle: site.role,
+  address: { '@type': 'PostalAddress', addressLocality: 'Jakarta', addressCountry: 'ID' },
+  worksFor: { '@type': 'Organization', name: 'PLN Icon Plus', url: 'https://plniconplus.co.id/' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'CEP CCIT University of Indonesia' },
   url: site.url,
   email: `mailto:${site.email}`,
   sameAs: site.socials.filter((s) => s.href.startsWith('http')).map((s) => s.href),

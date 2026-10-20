@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://brendatama.dev/sitemap-index.xml
+Sitemap: https://www.brendatama.dev/sitemap-index.xml

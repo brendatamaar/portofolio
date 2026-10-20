@@ -3,26 +3,33 @@ import Base from '../layouts/Base.astro';
 import Waterfall from '../components/Waterfall.astro';
 import Sticker from '../components/Sticker.astro';
 import Logo from '../components/Logo.astro';
-import { site, about, services, method, faq, projects } from '../data/site';
+import { site, work, education, skills, sideProjects, workProjects, projects, tones } from '../data/site';
 import { allPosts, isoDate, minutes } from '../lib/posts';
 const posts = await allPosts();
 const [lead, ...rest] = posts;
-const tones = ['orange', 'lavender', 'green', 'coral'] as const;
+const coverTones = ['orange', 'lavender', 'green', 'coral'] as const;
+const github = site.socials.find((s) => s.label === 'GitHub')!;
+const linkedin = site.socials.find((s) => s.label === 'LinkedIn')!;
 ---
 <Base current="home">
   <!-- Hero -->
   <section class="hero band band--navy" aria-labelledby="hero-title">
-    <p class="hero__eyebrow" data-reveal="fade" data-intro><span class="hero__heart" aria-hidden="true">●</span> {site.name}, web software developer</p>
+    <p class="hero__eyebrow" data-reveal="fade" data-intro><span class="hero__heart" aria-hidden="true">●</span> {site.location}</p>
     <h1 id="hero-title" class="hero__title display">
-      <span class="hero__line" style="--i:0">Web apps that</span>
-      <span class="hero__line" style="--i:1"><span class="ink-lavender">load</span> <span class="hero__live" aria-hidden="true" data-pop><span class="hero__live-dot"></span><span data-live-ms>live</span></span> <span class="ink-orange">fast</span></span>
-      <span class="hero__line" style="--i:2">on bad Wi-Fi too</span>
+      <span class="hero__line" style="--i:0">Hi, I’m <span class="ink-orange">{site.firstName}.</span></span>
+      <span class="hero__line ink-lavender" style="--i:1">Web software developer</span>
+      <span class="hero__line" style="--i:2">based in {site.city}.</span>
     </h1>
-    <p class="hero__sub" data-reveal="fade" data-intro data-delay="0.35">I build the whole thing, from the database to the button, and I test it on a slow phone before I call it done.</p>
+    <p class="hero__sub" data-reveal="fade" data-intro data-delay="0.35">{site.summary}</p>
     <div class="hero__ctas" data-reveal="fade" data-intro data-delay="0.45">
-      <a class="pill pill--light" href={`mailto:${site.email}`}><span>Email me</span><span class="pill__arrow" aria-hidden="true">→</span></a>
-      <a class="pill pill--ghost" href="#work"><span>See the work</span><span class="pill__arrow" aria-hidden="true">↓</span></a>
+      <a class="pill pill--light" href={site.resume} download><span>Download Resume</span><span class="pill__arrow" aria-hidden="true">↓</span></a>
+      <a class="pill pill--ghost" href={`mailto:${site.email}`}><span>Send an email</span><span class="pill__arrow" aria-hidden="true">→</span></a>
     </div>
+    <p class="hero__find" data-reveal="fade" data-intro data-delay="0.55">
+      <span>Find me on</span>
+      <a class="chip chip--dark" href={github.href} rel="me noopener">GitHub ↗</a>
+      <a class="chip chip--dark" href={linkedin.href} rel="me noopener">LinkedIn ↗</a>
+    </p>
 
     <Sticker kind="squiggle" color="#ff8a1e" class="hero__s1" />
     <Sticker kind="badge" class="hero__s2" />
@@ -35,43 +42,51 @@ const tones = ['orange', 'lavender', 'green', 'coral'] as const;
         <div class="tags" aria-hidden="true">
           <span class="tag tag--orange" data-pop style="--r:-8deg">200 OK</span>
           <span class="tag tag--coral" data-pop style="--r:4deg">cache hit</span>
-          <span class="tag tag--lime" data-pop style="--r:-3deg">0 layout shift</span>
+          <span class="tag tag--lime" data-pop style="--r:-3deg">loaded in <span data-live-ms>live</span></span>
         </div>
         <p class="hero__claim-text">This page measured itself. <span>Every request it took to reach you is listed below, live.</span></p>
       </div>
-      <a class="stat stat--green bite" href="#live" style="--bite: var(--c-navy)">
-        <span class="stat__num" data-stat="req">live</span>
-        <span class="stat__label">requests to load this page</span>
+      <a class="stat stat--green bite" href="#work" style="--bite: var(--c-navy)">
+        <span class="stat__num">Since {work[work.length - 1].start}</span>
+        <span class="stat__label">building for the web, from front-end to full stack</span>
         <span class="bite__btn" aria-hidden="true">↗</span>
       </a>
-      <a class="stat stat--lime bite" href="#live" style="--bite: var(--c-navy)">
-        <span class="stat__num" data-stat="kb">live</span>
-        <span class="stat__label">transferred, on your connection</span>
+      <a class="stat stat--lime bite" href="#projects" style="--bite: var(--c-navy)">
+        <span class="stat__num">{projects.length} projects</span>
+        <span class="stat__label">side projects and work, listed on this page</span>
         <span class="bite__btn" aria-hidden="true">↗</span>
       </a>
     </div>
   </section>
 
-  <!-- Services -->
-  <section class="section" id="services" aria-labelledby="services-title">
+  <!-- 01 Projects -->
+  <section class="section" id="projects" aria-labelledby="projects-title">
     <div class="section__head">
       <div>
-        <p class="eyebrow">What I do</p>
-        <h2 id="services-title" class="display section__title" data-split="lines">Work that makes slow apps fast</h2>
+        <p class="eyebrow">What I’ve built</p>
+        <h2 id="projects-title" class="display section__title" data-split="lines">Projects</h2>
       </div>
-      <p class="section__note">Six kinds of work I take on, each linked to a project or a post that shows how I do it.</p>
+      <p class="section__note">Side projects and experiments. Each card opens with the stack and a link to the code or the live demo.</p>
     </div>
     <ul class="cards">
-      {services.map((s, i) => (
+      {sideProjects.map((p, i) => (
         <li data-reveal="up" data-delay={String((i % 3) * 0.06)}>
-          <a class={`card card--${s.tone} bite`} href={s.href}>
-            <h3 class="card__title display">{s.title}</h3>
-            <p class="card__text">{s.text}</p>
-            <span class="card__cta">{s.cta}</span>
+          <a class={`card card--${tones[i % tones.length]} bite`} href={`/work/${p.slug}/`}>
+            <h3 class="card__title display">{p.title}</h3>
+            <p class="card__text">{p.summary}</p>
+            <ul class="chips card__chips">{p.stack.map((s) => <li class="chip chip--card">{s}</li>)}</ul>
             <span class="bite__btn" aria-hidden="true">↗</span>
           </a>
         </li>
       ))}
+      <li data-reveal="up" data-delay="0.12">
+        <a class="card card--navy bite" href={github.href} rel="me noopener">
+          <h3 class="card__title display">More on GitHub</h3>
+          <p class="card__text">Experiments, tools and the code behind everything on this page.</p>
+          <span class="card__cta">github.com/brendatamaar</span>
+          <span class="bite__btn" aria-hidden="true">↗</span>
+        </a>
+      </li>
     </ul>
   </section>
 
@@ -94,59 +109,75 @@ const tones = ['orange', 'lavender', 'green', 'coral'] as const;
     </div>
   </section>
 
-  <!-- Method -->
-  <section class="section" aria-labelledby="method-title">
+  <!-- 02 Work -->
+  <section class="section" id="work" aria-labelledby="work-title">
     <div class="section__head section__head--single">
-      <p class="eyebrow">How I work</p>
-      <h2 id="method-title" class="display section__title" data-split="lines">Four steps, in this order</h2>
+      <p class="eyebrow">Where I’ve worked</p>
+      <h2 id="work-title" class="display section__title" data-split="lines">Work</h2>
     </div>
     <ol class="steps">
-      {method.map((m, i) => (
+      {work.map((w, i) => (
         <li class="step">
           <details class:list={['step__details', { 'step__details--first': i === 0 }]} open={i === 0}>
             <summary class="step__summary">
-              <span class="step__n display">{i + 1}.</span>
-              <span class="step__title display">{m.title}</span>
-              <span class="step__text">{m.text}</span>
+              <span class="step__n mono">{w.start}<br />{w.end}</span>
+              <span class="step__title display">{w.company}<span class="step__role">{w.title}</span></span>
+              <span class="step__text">{w.description}</span>
               <span class="step__toggle" aria-hidden="true"></span>
             </summary>
-            {m.columns.length > 0 && (
+            {i === 0 && (
               <div class="step__cols">
-                {m.columns.map((c) => (
-                  <div class="step__col">
-                    <p class="step__col-title">{c.title}</p>
-                    <p class="step__col-sub">{c.sub}</p>
-                    <ul class="chips">{c.chips.map((ch) => <li class={`chip chip--${ch.tone}`}>{ch.label}</li>)}</ul>
-                  </div>
+                {workProjects.map((p) => (
+                  <a class="step__col" href={`/work/${p.slug}/`}>
+                    <p class="step__col-title">{p.title}</p>
+                    <p class="step__col-sub">{p.stack.length} technologies</p>
+                    <ul class="chips">{p.stack.slice(0, 3).map((s, j) => <li class={`chip chip--${(['lime', 'lavender', 'green'] as const)[j]}`}>{s}</li>)}</ul>
+                  </a>
                 ))}
               </div>
             )}
           </details>
         </li>
       ))}
+      <li class="step">
+        <details class="step__details">
+          <summary class="step__summary">
+            <span class="step__n mono">{education.start}<br />{education.end}</span>
+            <span class="step__title display">{education.school}<span class="step__role">{education.degree}</span></span>
+            <span class="step__text">{education.description}</span>
+            <span class="step__toggle" aria-hidden="true"></span>
+          </summary>
+        </details>
+      </li>
     </ol>
+    <div class="stack">
+      <p class="eyebrow" id="stack-label">Tech stack</p>
+      <ul class="chips chips--lg" aria-labelledby="stack-label">
+        {skills.map((t, i) => <li class={`chip chip--${(['lime', 'lavender', 'orange', 'green', 'coral'] as const)[i % 5]}`}>{t}</li>)}
+      </ul>
+    </div>
   </section>
 
   <!-- Statement band -->
-  <section class="section" aria-label="Principles">
+  <section class="section" aria-label="How I build">
     <div class="banner bite" style="--bite: var(--c-bg)" data-reveal="up">
-      <span class="tag tag--orange banner__t1" data-pop style="--r:-6deg" aria-hidden="true">no spinner theatre</span>
-      <span class="tag tag--green banner__t2" data-pop style="--r:5deg" aria-hidden="true">real devices</span>
-      <span class="tag tag--coral banner__t3" data-pop style="--r:-4deg" aria-hidden="true">budgets on deploy</span>
-      <p class="banner__text display">Fast by default. Accessible by habit. Boring to run.</p>
-      <p class="banner__note">Speed is a property of the request, not a coat of paint at the end. I design for it from the first commit.</p>
+      <span class="tag tag--orange banner__t1" data-pop style="--r:-6deg" aria-hidden="true">since {work[work.length - 1].start}</span>
+      <span class="tag tag--green banner__t2" data-pop style="--r:5deg" aria-hidden="true">{site.city}</span>
+      <span class="tag tag--coral banner__t3" data-pop style="--r:-4deg" aria-hidden="true">RPG games and good stories</span>
+      <p class="banner__text display">Simplicity and usability, first.</p>
+      <p class="banner__note">{site.about}</p>
       <Logo class="banner__logo" />
       <Sticker kind="sparkle" color="#0e1a2b" class="banner__s1" />
       <Sticker kind="star" color="#ff8a1e" class="banner__s2" />
     </div>
   </section>
 
-  <!-- Work -->
-  <section class="section" id="work" aria-labelledby="work-title">
+  <!-- Selected work -->
+  <section class="section" id="selected" aria-labelledby="selected-title">
     <div class="section__head">
       <div>
-        <p class="eyebrow">Selected work</p>
-        <h2 id="work-title" class="display section__title" data-split="lines">Featured projects</h2>
+        <p class="eyebrow">Built at {workProjects[0].company}</p>
+        <h2 id="selected-title" class="display section__title" data-split="lines">Selected work</h2>
       </div>
       <div class="rail__ctrl">
         <button class="round" type="button" data-rail-prev aria-label="Previous projects">←</button>
@@ -154,47 +185,35 @@ const tones = ['orange', 'lavender', 'green', 'coral'] as const;
       </div>
     </div>
     <ul class="rail" data-rail>
-      {projects.map((p, i) => (
+      {workProjects.map((p, i) => (
         <li class="proj" data-reveal="up" data-delay={String(i * 0.06)}>
           <a class="proj__link" href={`/work/${p.slug}/`}>
-            <span class={`proj__cover cover--${tones[i % tones.length]} bite`} style="--bite: var(--c-bg)" aria-hidden="true">
-              <span class="proj__bars">
-                {p.path.map((s, j) => <span class="proj__bar" style={`--j:${j}`}><span>{s.name}</span></span>)}
-              </span>
-              <span class="proj__year mono">{p.year}</span>
-              <span class="bite__btn">↗</span>
+            <span class={`proj__cover cover--${coverTones[i % coverTones.length]} bite`} style="--bite: var(--c-bg)">
+              {p.img ? (
+                <img class="proj__img" src={p.img.src} width={p.img.width} height={p.img.height} alt={`Screenshot of ${p.title}`} loading="lazy" decoding="async" />
+              ) : (
+                <span class="proj__bars" aria-hidden="true">
+                  {p.stack.slice(0, 4).map((s, j) => <span class="proj__bar" style={`--j:${j}`}><span>{s}</span></span>)}
+                </span>
+              )}
+              <span class="bite__btn" aria-hidden="true">↗</span>
             </span>
             <span class="proj__title display">{p.title}</span>
-            <span class="proj__kind">{p.kind}. {p.client}.</span>
+            <span class="proj__kind">{p.summary}</span>
           </a>
         </li>
       ))}
     </ul>
   </section>
 
-  <!-- About -->
-  <section class="section about" id="about" aria-labelledby="about-title">
-    <div class="about__card bite" style="--bite: var(--c-bg)" data-reveal="up">
-      <Sticker kind="bolt" color="#d7ec4a" class="about__s1" />
-      <p class="eyebrow eyebrow--light">About</p>
-      <h2 id="about-title" class="display about__title" data-split="lines">Hi, I’m Brendatama</h2>
-    </div>
-    <div class="about__body">
-      {about.bio.map((p) => <p>{p}</p>)}
-      <ul class="chips chips--lg" aria-label="Tools I use">
-        {about.tools.map((t, i) => <li class={`chip chip--${(['lime', 'lavender', 'orange', 'green', 'coral'] as const)[i % 5]}`}>{t}</li>)}
-      </ul>
-    </div>
-  </section>
-
-  <!-- Blog -->
+  <!-- 03 Writing -->
   <section class="section" aria-labelledby="blog-title">
     <div class="section__head">
       <div>
-        <p class="eyebrow">From the blog</p>
-        <h2 id="blog-title" class="display section__title" data-split="lines">Notes from the network tab</h2>
+        <p class="eyebrow">What I’ve been thinking</p>
+        <h2 id="blog-title" class="display section__title" data-split="lines">Writing</h2>
       </div>
-      <a class="pill pill--dark" href="/blog/"><span>All posts</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+      <a class="pill pill--dark" href="/blog/"><span>See all posts</span><span class="pill__arrow" aria-hidden="true">→</span></a>
     </div>
     <div class="blogs">
       <div data-reveal="up">
@@ -220,33 +239,21 @@ const tones = ['orange', 'lavender', 'green', 'coral'] as const;
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="section faq" aria-labelledby="faq-title">
-    <div class="faq__head">
-      <h2 id="faq-title" class="display section__title" data-split="lines">Your questions answered</h2>
-      <p class="section__note">Still unsure? Email me with a link and what is going wrong. A short answer costs nothing.</p>
-    </div>
-    <div class="faq__list">
-      {faq.map((f) => (
-        <details class="qa">
-          <summary class="qa__q"><span class="qa__icon" aria-hidden="true"></span><span>{f.q}</span></summary>
-          <p class="qa__a">{f.a}</p>
-        </details>
-      ))}
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section" aria-labelledby="cta-title">
+  <!-- 04 Connect -->
+  <section class="section" id="connect" aria-labelledby="cta-title">
     <div class="cta bite" style="--bite: var(--c-bg)">
-      <span class="tag tag--lime cta__t1" data-pop style="--r:-5deg" aria-hidden="true">replies in two days</span>
-      <span class="tag tag--coral cta__t2" data-pop style="--r:6deg" aria-hidden="true">new work 2027</span>
-      <Sticker kind="squiggle" color="#ff8a1e" class="cta__s1" style="--r:20deg" />
+      <span class="tag tag--lime cta__t1" data-pop style="--r:-5deg" aria-hidden="true">let’s talk</span>
+      <span class="tag tag--coral cta__t2" data-pop style="--r:6deg" aria-hidden="true">{site.location}</span>
+      <Sticker kind="squiggle" color="#ff8a1e" class="cta__s1" />
       <Sticker kind="sparkle" color="#d7ec4a" class="cta__s2" />
       <Sticker kind="star" color="#9c8cff" class="cta__s3" />
-      <h2 id="cta-title" class="display cta__title" data-split="lines">Ready to make your <span class="ink-lavender">app</span> <span class="ink-orange">fast</span>?</h2>
-      <p class="cta__note">{site.availability}</p>
-      <a class="pill pill--light" href={`mailto:${site.email}`}><span>Email me</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+      <h2 id="cta-title" class="display cta__title" data-split="lines">Have an <span class="ink-orange">idea</span>?</h2>
+      <p class="cta__note">{site.connect.text}</p>
+      <div class="cta__buttons">
+        <a class="pill pill--light" href={`mailto:${site.email}`}><span>Send an email</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+        <a class="pill pill--ghost" href={github.href} rel="me noopener"><span>GitHub</span><span class="pill__arrow" aria-hidden="true">↗</span></a>
+        <a class="pill pill--ghost" href={linkedin.href} rel="me noopener"><span>LinkedIn</span><span class="pill__arrow" aria-hidden="true">↗</span></a>
+      </div>
     </div>
   </section>
 </Base>

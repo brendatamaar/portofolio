@@ -6,8 +6,8 @@ import { site } from '../data/site';
 export async function GET(context: APIContext) {
   const posts = await allPosts();
   return rss({
-    title: `${site.name}, blog`,
-    description: 'Notes on fast pages and boring, reliable back ends.',
+    title: `${site.name}, writing`,
+    description: 'What I have been thinking about while building web applications.',
     site: context.site ?? site.url,
     items: posts.map((p) => ({
       title: p.data.title,

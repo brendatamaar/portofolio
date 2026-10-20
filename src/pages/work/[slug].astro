@@ -1,87 +1,65 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { projects, site } from '../../data/site';
+import { projects, site, tones } from '../../data/site';
 
 export function getStaticPaths() {
   return projects.map((p, i) => ({
     params: { slug: p.slug },
-    props: { project: p, next: projects[(i + 1) % projects.length] },
+    props: { project: p, index: i, next: projects[(i + 1) % projects.length] },
   }));
 }
-const { project: p, next } = Astro.props;
+const { project: p, index, next } = Astro.props;
+const kind = p.type === 'work' ? `Work at ${p.company}` : 'Side project';
 const schema = {
   '@context': 'https://schema.org',
-  '@type': 'CreativeWork',
+  '@type': p.type === 'work' ? 'CreativeWork' : 'SoftwareSourceCode',
   name: p.title,
   abstract: p.summary,
-  dateCreated: String(p.year),
-  creator: { '@type': 'Person', name: site.name },
+  creator: { '@type': 'Person', name: site.fullName },
+  ...(p.link ? { url: p.link.href } : {}),
 };
 ---
-<Base title={`${p.title}, ${p.kind.toLowerCase()}`} description={p.summary} current="work" schema={schema}>
+<Base title={`${p.title}, ${kind.toLowerCase()}`} description={p.summary.length >= 60 ? p.summary : p.detail} current="work" schema={schema} image={p.img?.src}>
   <article class="case">
     <header class="case__hero">
-      <p class="case__kind mono">{p.kind}, {p.year}</p>
+      <p class="case__kind mono">{kind}</p>
       <h1 class="case__title display" data-split="words" data-intro>{p.title}</h1>
       <p class="case__summary" data-split="lines" data-intro data-delay="0.3">{p.summary}</p>
       <dl class="case__meta" data-reveal="fade" data-intro data-delay="0.5">
-        <div><dt>Client</dt><dd>{p.client}</dd></div>
-        <div><dt>Year</dt><dd class="mono">{p.year}</dd></div>
-        <div><dt>Role</dt><dd>{p.role.join(', ')}</dd></div>
-        <div><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
+        <div><dt>Type</dt><dd>{p.type === 'work' ? 'Work' : 'Side project'}</dd></div>
+        <div><dt>{p.type === 'work' ? 'Company' : 'Author'}</dt><dd>{p.company ?? site.name}</dd></div>
+        <div class="case__meta-wide"><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
       </dl>
-      {p.placeholder && <p class="case__flag mono">Example project: the client and details are illustrative.</p>}
+      {p.link && (
+        <p class="case__cta" data-reveal="fade" data-intro data-delay="0.6">
+          <a class="pill pill--light" href={p.link.href} rel="noopener"><span>{p.link.label}</span><span class="pill__arrow" aria-hidden="true">↗</span></a>
+        </p>
+      )}
     </header>
 
-    <section class="case__section" aria-labelledby="context">
-      <h2 id="context" class="case__h">Context</h2>
-      <p class="case__text" data-split="lines">{p.context}</p>
+    {p.img && (
+      <figure class="case__shot" data-reveal="up">
+        <img src={p.img.src} width={p.img.width} height={p.img.height} alt={`Screenshot of ${p.title}`} decoding="async" fetchpriority="high" />
+      </figure>
+    )}
+
+    <section class="case__section case__section--idea" aria-labelledby="about">
+      <h2 id="about" class="case__h">About the project</h2>
+      <p class="case__text case__text--big" data-split="lines">{p.detail}</p>
     </section>
 
-    <section class="case__section case__section--idea" aria-labelledby="idea">
-      <h2 id="idea" class="case__h">Idea</h2>
-      <p class="case__text case__text--big" data-split="lines">{p.idea}</p>
-    </section>
-
-    <section class="case__path" aria-labelledby="path">
-      <h2 id="path" class="case__h">Request path</h2>
-      <p class="case__lede">What happens, in order, when someone opens it.</p>
-      <ol class="path" data-path>
-        {p.path.map((s, i) => (
-          <li class="path__stage" style={`--i:${i}`}>
-            <span class="path__n mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="path__name">{s.name}</h3>
-            <p class="path__text">{s.text}</p>
-            <span class="path__bar" aria-hidden="true"></span>
-          </li>
-        ))}
-      </ol>
-    </section>
-
-    <section class="case__section" aria-labelledby="budget">
-      <h2 id="budget" class="case__h">Budget</h2>
-      <div class="case__budget">
-        <p class="case__lede">Targets it was built against. They were checked on every deploy.</p>
-        <table class="budget">
-          <caption class="sr-only">Performance and reliability budget for {p.title}</caption>
-          <thead><tr><th scope="col">Measure</th><th scope="col">Target</th></tr></thead>
-          <tbody>
-            {p.budget.map((b) => <tr><td>{b.metric}</td><td class="mono">{b.target}</td></tr>)}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="case__section" aria-labelledby="outcome">
-      <h2 id="outcome" class="case__h">Outcome</h2>
-      <p class="case__text" data-split="lines">{p.outcome}</p>
+    <section class="case__section" aria-labelledby="stack">
+      <h2 id="stack" class="case__h">Built with</h2>
+      <ul class="chips chips--lg case__chips">
+        {p.stack.map((s, i) => <li class={`chip chip--${tones[(i + index) % 5]}`}>{s}</li>)}
+      </ul>
     </section>
 
     <nav class="next" aria-label="Next project">
       <a class="next__link" href={`/work/${next.slug}/`}>
-        <span class="next__label mono">Next request</span>
+        <span class="next__label mono">Next project</span>
         <span class="next__title">{next.title}</span>
-        <span class="next__kind">{next.kind}</span>
+        <span class="next__kind">{next.summary}</span>
         <span class="next__track" aria-hidden="true"><span></span></span>
       </a>
     </nav>
