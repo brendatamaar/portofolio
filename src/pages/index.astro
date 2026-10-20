@@ -14,18 +14,18 @@ const linkedin = site.socials.find((s) => s.label === 'LinkedIn')!;
 <Base current="home">
   <!-- Hero -->
   <section class="hero band band--navy" aria-labelledby="hero-title">
-    <p class="hero__eyebrow" data-reveal="fade" data-intro><span class="hero__heart" aria-hidden="true">●</span> {site.location}</p>
+    <p class="hero__eyebrow hero__rise" style="--i:0"><span class="hero__heart" aria-hidden="true">●</span> {site.location}</p>
     <h1 id="hero-title" class="hero__title display">
       <span class="hero__line" style="--i:0">Hi, I’m <span class="ink-orange">{site.firstName}.</span></span>
       <span class="hero__line ink-lavender" style="--i:1">Web software developer</span>
       <span class="hero__line" style="--i:2">based in {site.city}.</span>
     </h1>
-    <p class="hero__sub" data-reveal="fade" data-intro data-delay="0.35">{site.summary}</p>
-    <div class="hero__ctas" data-reveal="fade" data-intro data-delay="0.45">
+    <p class="hero__sub hero__rise" style="--i:3">{site.summary}</p>
+    <div class="hero__ctas hero__rise" style="--i:4">
       <a class="pill pill--light" href={site.resume} download><span>Download Resume</span><span class="pill__arrow" aria-hidden="true">↓</span></a>
       <a class="pill pill--ghost" href={`mailto:${site.email}`}><span>Send an email</span><span class="pill__arrow" aria-hidden="true">→</span></a>
     </div>
-    <p class="hero__find" data-reveal="fade" data-intro data-delay="0.55">
+    <p class="hero__find hero__rise" style="--i:5">
       <span>Find me on</span>
       <a class="chip chip--dark" href={github.href} rel="me noopener">GitHub ↗</a>
       <a class="chip chip--dark" href={linkedin.href} rel="me noopener">LinkedIn ↗</a>

@@ -141,6 +141,7 @@ html.frame-away .nav { translate: 0 -130%; }
 .hero__line { display: block; }
 /* The headline is the largest paint: it animates in CSS from the first frame, no script needed. */
 .motion .hero__line { animation: rise 0.9s var(--e-out) both; animation-delay: calc(80ms + var(--i) * 70ms); }
+.motion .hero__rise { animation: rise 0.9s var(--e-out) both; animation-delay: calc(80ms + var(--i) * 70ms); }
 @keyframes rise { from { opacity: 0; translate: 0 0.35em; } }
 .hero__live {
   display: inline-flex; align-items: center; gap: 0.12em; vertical-align: 0.12em;
