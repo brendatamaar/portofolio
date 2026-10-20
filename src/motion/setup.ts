@@ -1,64 +1,30 @@
 // Global motion for this site: runs once on the client, before the first page initializes.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ease, onPage, onScroll, prefersReducedMotion, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
+import { ease, onPage, onScroll, prefersReducedMotion, setTransition } from '../engine';
 import { net } from './net';
-import { startWaterfall, streamWhileLoading } from './waterfall';
+import { startWaterfall } from './waterfall';
 import { startVisit } from './visit';
 
 export function setupMotion() {
-  loader();
   transition();
   startWaterfall();
   startVisit();
   frame();
   readingProgress();
-  workTimeline();
+  stickers();
+  rail();
   requestPath();
   notFound();
 }
 
-// Loader: the counter is real elapsed time since the navigation started. On the home page the
-// table travels down into the hero, where the same rows are waiting; elsewhere it streams out.
-function loader() {
-  setLoaderFormat(() => `${String(Math.round(performance.now())).padStart(4, '0')} ms`);
-  const path = document.querySelector('[data-loader-path]');
-  if (path) path.textContent = location.pathname;
-  const stop = streamWhileLoading();
-  // Once per session: a reload or a second tab goes straight to the page, and the hero table
-  // replays the rows in place instead.
-  let seen = false;
-  try { seen = sessionStorage.getItem('wf-seen') === '1'; sessionStorage.setItem('wf-seen', '1'); } catch {}
-  if (seen) {
-    document.getElementById('loader')?.remove();
-    document.documentElement.classList.add('is-loaded');
-    document.fonts.ready.then(stop);
-    return;
-  }
-  document.addEventListener('loader:done', stop, { once: true });
-  setLoaderExit((root) => {
-    const from = root.querySelector<HTMLElement>('.loader__wf');
-    const to = document.querySelector<HTMLElement>('[data-waterfall="hero"]');
-    const tl = gsap.timeline();
-    tl.to(root.querySelectorAll('[data-loader-out]'), { autoAlpha: 0, y: -12, duration: 0.35, ease: ease.soft, stagger: 0.04 }, 0);
-    if (from && to) {
-      const dy = to.getBoundingClientRect().top - from.querySelector('.wf')!.getBoundingClientRect().top;
-      tl.to(from, { y: dy, duration: 0.65, ease: ease.inOut }, 0)
-        .to(root, { backgroundColor: 'rgb(233 235 238 / 0)', duration: 0.35, ease: ease.soft }, 0.3);
-    } else {
-      tl.to(root, { clipPath: 'inset(0% 0% 0% 100%)', duration: 0.65, ease: ease.inOut }, 0.05);
-    }
-    if (performance.now() > 1500) tl.timeScale(1.6); // the visitor already waited on the network
-    return tl;
-  });
-}
-
-// Navigation is a request: a panel streams across from the left while the next page is fetched,
-// then reports the real status and time before it streams off to the right.
+// Navigation is four requests: colored bands stream in from the left one after another, like rows
+// of a waterfall, while the next page is fetched; then the real status and time, and they stream
+// off to the right.
 function transition() {
   let crawl: gsap.core.Tween | null = null;
   const parts = (c: HTMLElement) => ({
-    panel: c.querySelector<HTMLElement>('.curtain__panel')!,
+    bands: c.querySelectorAll<HTMLElement>('.curtain__band'),
     req: c.querySelector<HTMLElement>('.curtain__req')!,
     path: c.querySelector<HTMLElement>('[data-req-path]')!,
     status: c.querySelector<HTMLElement>('[data-req-status]')!,
@@ -66,30 +32,69 @@ function transition() {
   });
   setTransition({
     leave: (c) => {
-      const { panel, req, path, status, bar } = parts(c);
+      const { bands, req, path, status, bar } = parts(c);
       path.textContent = net.to;
       status.textContent = 'pending';
       gsap.set(bar, { scaleX: 0, transformOrigin: '0% 50%' });
-      crawl = gsap.to(bar, { scaleX: 0.85, duration: 2, ease: 'power2.out', delay: 0.3 }); // honest: it waits for the fetch
+      crawl = gsap.to(bar, { scaleX: 0.85, duration: 2, ease: 'power2.out', delay: 0.45 }); // honest: it waits for the fetch
       document.documentElement.classList.add('is-navigating');
       return gsap.timeline()
         .set(c, { autoAlpha: 1 })
-        .set(req, { autoAlpha: 1 })
-        .fromTo(panel, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.7, ease: ease.inOut }, 0)
-        .fromTo(req, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.7, ease: ease.inOut }, 0);
+        .set(req, { autoAlpha: 0 })
+        .fromTo(bands, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.6, ease: ease.inOut, stagger: 0.07 }, 0)
+        .to(req, { autoAlpha: 1, duration: 0.25 }, 0.55);
     },
     enter: (c) => {
-      const { panel, req, status, bar } = parts(c);
+      const { bands, req, status, bar } = parts(c);
       crawl?.kill();
       status.textContent = `${statusOf(net.to)}  ${Math.max(1, Math.round(net.ms))} ms`;
       return gsap.timeline()
         .to(bar, { scaleX: 1, duration: 0.25, ease: ease.soft })
-        .addLabel('out', '+=0.12')
-        .to(req, { clipPath: 'inset(0% 0% 0% 100%)', duration: 0.75, ease: ease.inOut }, 'out')
-        .to(panel, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.75, ease: ease.inOut }, 'out')
+        .to(req, { autoAlpha: 0, duration: 0.2 }, '+=0.15')
+        .to(bands, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.6, ease: ease.inOut, stagger: 0.07 }, '<')
         .add(() => document.documentElement.classList.remove('is-navigating'))
         .set(c, { autoAlpha: 0 });
     },
+  });
+}
+
+// Stickers pop on like they were slapped onto the page; the badge keeps turning (the idle state).
+function stickers() {
+  onPage(({ intro }) => {
+    if (prefersReducedMotion()) return;
+    const pops = gsap.utils.toArray<HTMLElement>('[data-sticker], [data-pop]');
+    pops.forEach((el) => {
+      const inHero = !!el.closest('.hero, .nf');
+      // scale only: each sticker keeps its own CSS tilt
+      const from = { scale: 0, opacity: 0 };
+      const to = { scale: 1, opacity: 1, duration: 0.7, ease: ease.spring };
+      if (inHero) intro.add(gsap.fromTo(el, from, to), 0.25 + Math.random() * 0.35);
+      else gsap.fromTo(el, from, { ...to, scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
+    });
+    document.querySelectorAll('.sticker__ring').forEach((ring) => gsap.to(ring, { rotate: 360, duration: 24, ease: 'none', repeat: -1 }));
+  });
+}
+
+// Projects rail: native horizontal scroll with snap; the buttons move it one card at a time.
+function rail() {
+  onPage(() => {
+    const list = document.querySelector<HTMLElement>('[data-rail]');
+    if (!list) return;
+    const prev = document.querySelector<HTMLButtonElement>('[data-rail-prev]');
+    const next = document.querySelector<HTMLButtonElement>('[data-rail-next]');
+    const step = () => (list.firstElementChild as HTMLElement | null)?.getBoundingClientRect().width ?? list.clientWidth;
+    const sync = () => {
+      if (prev) prev.disabled = list.scrollLeft < 4;
+      if (next) next.disabled = list.scrollLeft + list.clientWidth > list.scrollWidth - 4;
+    };
+    const go = (dir: number) => list.scrollBy({ left: dir * (step() + 24), behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    const onPrev = () => go(-1);
+    const onNext = () => go(1);
+    prev?.addEventListener('click', onPrev);
+    next?.addEventListener('click', onNext);
+    list.addEventListener('scroll', sync, { passive: true }); // the rail's own scroll, not the page's
+    sync();
+    return () => { prev?.removeEventListener('click', onPrev); next?.removeEventListener('click', onNext); list.removeEventListener('scroll', sync); };
   });
 }
 
@@ -131,27 +136,6 @@ function readingProgress() {
     update();
     const off = onScroll(update); // the engine publishes native scroll too under reduced motion
     return () => { off(); };
-  });
-}
-
-// Work timeline: each project's bar streams in across the years it ran when the list arrives.
-function workTimeline() {
-  onPage(() => {
-    const list = document.querySelector<HTMLElement>('[data-work]');
-    if (!list || prefersReducedMotion()) return;
-    const bars = list.querySelectorAll('.row__bar');
-    const text = list.querySelectorAll('.row__title, .row__meta, .row__year');
-    gsap.set(bars, { scaleX: 0, transformOrigin: '0% 50%' });
-    gsap.set(text, { opacity: 0, y: 14 });
-    ScrollTrigger.create({
-      trigger: list,
-      start: 'top 82%',
-      once: true,
-      onEnter: () => {
-        gsap.to(text, { opacity: 1, y: 0, duration: 0.9, ease: ease.out, stagger: 0.04 });
-        gsap.to(bars, { scaleX: 1, duration: 1.1, ease: ease.out, stagger: 0.09, delay: 0.15 });
-      },
-    });
   });
 }
 

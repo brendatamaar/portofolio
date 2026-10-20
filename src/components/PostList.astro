@@ -2,21 +2,20 @@
 import { type Post, isoDate, minutes } from '../lib/posts';
 interface Props {
   posts: Post[];
-  full?: boolean; // show descriptions and tags (blog index)
   headingLevel?: 2 | 3;
 }
-const { posts, full = false, headingLevel = 3 } = Astro.props;
+const { posts, headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}` as 'h2' | 'h3';
+const tones = ['orange', 'lavender', 'green', 'coral', 'lime', 'navy'] as const;
 ---
-<ol class:list={['posts', { 'posts--full': full }]}>
-  {posts.map((post) => (
-    <li class="post-row">
-      <a class="post-row__link" href={`/blog/${post.id}/`}>
-        <time class="post-row__date mono" datetime={post.data.date.toISOString()}>{isoDate(post.data.date)}</time>
-        <H class="post-row__title">{post.data.title}</H>
-        {full && <p class="post-row__desc">{post.data.description}</p>}
-        <span class="post-row__meta mono">{minutes(post)} min read</span>
-        <span class="post-row__line" aria-hidden="true"></span>
+<ol class="posts">
+  {posts.map((post, i) => (
+    <li data-reveal="up" data-delay={String((i % 2) * 0.06)}>
+      <a class={`post-card card--${tones[i % tones.length]} bite`} href={`/blog/${post.id}/`}>
+        <span class="post-card__meta"><time datetime={post.data.date.toISOString()}>{isoDate(post.data.date)}</time>, {minutes(post)} min read</span>
+        <H class="post-card__title">{post.data.title}</H>
+        <p class="post-card__desc">{post.data.description}</p>
+        <span class="bite__btn" aria-hidden="true">↗</span>
       </a>
     </li>
   ))}

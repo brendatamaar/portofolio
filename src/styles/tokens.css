@@ -27,23 +27,33 @@
 }
 
 :root {
-  /* Color: a light network panel */
-  --c-bg: #e9ebee;
-  --c-fg: #0d0f12;
-  --c-muted: #575d66;
-  --c-line: rgb(13 15 18 / 0.14);
-  --c-accent: #1d45f0;
-  --c-signal: #c4241a;
-  --c-raised: #f4f5f7;
-  --c-curtain: var(--c-fg);
+  /* Color: navy night, white day, and the network panel's type colors (DESIGN.md) */
+  --c-navy: #0e1a2b;
+  --c-navy-2: #1b2a42;
+  --c-bg: #ffffff;
+  --c-raised: #f3f4f8;
+  --c-fg: #0e1a2b;
+  --c-muted: #5b6577;
+  --c-muted-dark: #a9b3c7;
+  --c-line: rgb(14 26 43 / 0.12);
+  --c-orange: #ff8a1e;
+  --c-lavender: #9c8cff;
+  --c-coral: #ff5b3a;
+  --c-green: #21b47d;
+  --c-lime: #d7ec4a;
+  --c-eyebrow: #c4351a;
+  --c-accent: var(--c-lavender);
+  --c-signal: var(--c-coral);
+  --c-curtain: var(--c-navy);
+  --focus: var(--c-navy);
 
   /* Type */
   --f-display: 'Archivo', 'Archivo Fallback', system-ui, sans-serif;
   --f-body: 'Archivo', 'Archivo Fallback', system-ui, sans-serif;
   --f-mono: 'JB Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --t-mega: clamp(3.5rem, 13.2cqi, 15rem);
-  --t-xl: clamp(2.4rem, 1.2rem + 5vw, 6.5rem);
+  --t-mega: clamp(3.4rem, 1rem + 8.6vw, 9.8rem);
+  --t-xl: clamp(2.5rem, 1.3rem + 4.4vw, 5.4rem);
   --t-l: clamp(1.6rem, 1.1rem + 2vw, 3rem);
   --t-m: clamp(1.2rem, 1.05rem + 0.6vw, 1.6rem);
   --t-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
@@ -54,10 +64,11 @@
   --u: clamp(0.5rem, 0.35rem + 0.6vw, 1rem);
   --gutter: clamp(1rem, 0.6rem + 1.6vw, 2.5rem);
   --cols: 12;
-  --bar: 0.5rem;
+  --bar: 0.7rem;
 
   /* Shape */
-  --radius: 0px;
+  --radius: 1.5rem; /* cards; pills are fully round */
+  --r-sm: 0.9rem;
 
   /* Motion (CSS side of the engine eases) */
   --e-out: cubic-bezier(0.16, 1, 0.3, 1);

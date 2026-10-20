@@ -5,7 +5,8 @@
 // - GitHub handle comes from the repository owner (brendatamaar); LinkedIn URL is a guess.
 // - The four projects, their clients, years, stacks, request paths and budgets are fictional
 //   examples that show how a case study reads. Clients are described, never named.
-// - The bio, services and tool list are a plausible starting point, not facts.
+// - The bio, services, tool list, the six service cards, the four method steps and the FAQ
+//   answers are a plausible starting point in your voice, not facts.
 // - No location is stated because none was given.
 
 export type Stage = { name: string; text: string };
@@ -66,6 +67,40 @@ export const about = {
   tools: ['TypeScript', 'React', 'Astro', 'Node.js', 'PostgreSQL', 'Redis', 'Playwright', 'Docker'],
   placeholder: true,
 };
+
+// Card colors double as the waterfall legend: the network panel colors requests by type.
+export type Tone = 'orange' | 'lavender' | 'coral' | 'green' | 'lime' | 'navy';
+
+export const services: { title: string; text: string; tone: Tone; href: string; cta: string }[] = [
+  { title: 'Web applications', text: 'From the database schema to the button: one person who can follow a bug through every layer.', tone: 'orange', href: '/work/night-shift/', cta: 'See Night Shift' },
+  { title: 'Performance audits', text: 'I read the waterfall, find the slow requests and fix them in your code, not in a slide deck.', tone: 'lavender', href: '/blog/reading-a-waterfall/', cta: 'Read how I audit' },
+  { title: 'Accessibility repairs', text: 'Keyboard paths, focus, contrast and screen reader names fixed in the product you already have.', tone: 'coral', href: `mailto:${site.email}`, cta: 'Email about an audit' },
+  { title: 'APIs and data models', text: 'Schemas, migrations and tenant isolation that hold up when the second customer arrives.', tone: 'green', href: '/blog/row-level-security/', cta: 'Read about isolation' },
+  { title: 'Offline first apps', text: 'Forms that save on the device first and sync when the signal comes back, without losing a record.', tone: 'lime', href: '/work/field-notes/', cta: 'See Field Notes' },
+  { title: 'Interfaces that feel instant', text: 'Optimistic updates with honest pending states, so the screen never shows what the server refused.', tone: 'navy', href: '/blog/optimistic-updates-that-dont-lie/', cta: 'Read the pattern' },
+];
+
+export const method: { title: string; text: string; columns: { title: string; sub: string; chips: { label: string; tone: Tone }[] }[] }[] = [
+  {
+    title: 'Measure first',
+    text: 'Before touching code I load your product on a throttled phone and read the waterfall, the traces and the error logs. The numbers decide what gets fixed first.',
+    columns: [
+      { title: 'Load', sub: 'What travels', chips: [{ label: 'Waterfall', tone: 'lime' }, { label: 'Bundle size', tone: 'orange' }, { label: 'Fonts', tone: 'coral' }] },
+      { title: 'Run', sub: 'What blocks', chips: [{ label: 'Main thread', tone: 'navy' }, { label: 'Long tasks', tone: 'lavender' }, { label: 'Queries', tone: 'green' }] },
+      { title: 'Use', sub: 'What breaks', chips: [{ label: 'Keyboard', tone: 'lavender' }, { label: 'Slow 4G', tone: 'lime' }, { label: 'Errors', tone: 'coral' }] },
+    ],
+  },
+  { title: 'Fix the request path', text: 'Send less, send it earlier and send it from closer. Most speed lives in what the server returns before any app code runs.', columns: [] },
+  { title: 'Build the feature', text: 'Server rendered HTML first, the least script that makes it interactive, and a data model that keeps tenants and records apart.', columns: [] },
+  { title: 'Ship with a budget', text: 'Every project gets targets for load time, script size and errors, checked on each deploy so the speed stays after I leave.', columns: [] },
+];
+
+export const faq: { q: string; a: string }[] = [
+  { q: 'What kind of projects do you take?', a: 'Web applications that need to be fast and dependable: new builds that should start small, and existing products that have become slow or fragile.' },
+  { q: 'Can you work in an existing codebase?', a: 'Yes, most of my work is in code someone else started. I begin by measuring and reading, and change as little as the fix needs.' },
+  { q: 'How do we start?', a: 'Send an email with a link and what is going wrong. I reply within two working days with questions or a short plan.' },
+  { q: 'Do you stay on after launch?', a: 'I can. Budgets and checks run on every deploy, so you can also keep the speed without me.' },
+];
 
 export const projects: Project[] = [
   {

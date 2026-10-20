@@ -1,27 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
+import Sticker from '../components/Sticker.astro';
 ---
-<Base title="Not found" description="This address returned 404. Nothing was ever served here, but the index, the case studies and the blog are one click away.">
+<Base title="Not found" description="This address returned 404. Nothing was ever served here, but the home page, the case studies and the blog are one click away.">
   <section class="nf">
-    <table class="nf__table" data-notfound>
+    <Sticker kind="squiggle" color="#9c8cff" class="nf__s1" />
+    <Sticker kind="star" color="#d7ec4a" class="nf__s2" />
+    <Sticker kind="sparkle" color="#ff8a1e" class="nf__s3" />
+    <h1 class="nf__title" data-split="words" data-intro>404</h1>
+    <p class="nf__text" data-reveal="fade" data-intro data-delay="0.25">The request went out and came back empty. Nothing lives at this address, and nothing ever has.</p>
+    <table class="nf__table" data-notfound data-reveal="up" data-intro data-delay="0.35">
       <caption class="sr-only">The request for this page</caption>
       <thead>
-        <tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" class="nf__c-time">Time</th><th scope="col" class="nf__c-bar"><span class="sr-only">Waterfall</span></th></tr>
+        <tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" class="nf__c-time">Time</th><th scope="col"><span class="sr-only">Waterfall</span></th></tr>
       </thead>
       <tbody>
         <tr>
-          <td class="mono nf__path" data-nf-path>this address</td>
-          <td class="mono nf__status">404 Not Found</td>
-          <td class="mono nf__c-time" data-nf-time></td>
-          <td class="nf__c-bar"><span class="nf__track"><span class="nf__bar" data-nf-bar></span></span></td>
+          <td class="nf__path" data-nf-path>this address</td>
+          <td class="nf__status">404 Not Found</td>
+          <td class="nf__c-time" data-nf-time></td>
+          <td><span class="nf__track"><span class="nf__bar" data-nf-bar></span></span></td>
         </tr>
       </tbody>
     </table>
-    <h1 class="nf__title" data-split="chars" data-intro>404</h1>
-    <p class="nf__text" data-split="lines" data-intro data-delay="0.3">The request went out and came back empty. Nothing lives at this address, and nothing ever has.</p>
     <p class="nf__links" data-reveal="fade" data-intro data-delay="0.5">
-      <a class="arrow-link" href="/"><span>Back to the index</span><span class="arrow" aria-hidden="true">→</span></a>
-      <a class="arrow-link" href="/blog/"><span>Read the blog</span><span class="arrow" aria-hidden="true">→</span></a>
+      <a class="pill pill--light" href="/"><span>Back to the home page</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+      <a class="pill pill--ghost" href="/blog/"><span>Read the blog</span><span class="pill__arrow" aria-hidden="true">→</span></a>
     </p>
   </section>
 </Base>

@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import { site } from '../data/site';
-import Loader from '../components/Loader.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/tokens.css';
@@ -41,7 +40,7 @@ const person = {
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#e9ebee" />
+    <meta name="theme-color" content="#0e1a2b" />
     <meta name="author" content={site.name} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
@@ -74,7 +73,12 @@ const person = {
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div id="curtain" transition:persist="curtain" aria-hidden="true">
-      <div class="curtain__panel"></div>
+      <div class="curtain__panel">
+        <span class="curtain__band curtain__band--orange"></span>
+        <span class="curtain__band curtain__band--lavender"></span>
+        <span class="curtain__band curtain__band--lime"></span>
+        <span class="curtain__band curtain__band--navy"></span>
+      </div>
       <div class="curtain__req">
         <span class="mono">GET</span>
         <span class="mono curtain__path" data-req-path>/</span>
@@ -82,7 +86,6 @@ const person = {
         <span class="curtain__bar"><span></span></span>
       </div>
     </div>
-    <Loader />
     <Header current={current} progress={progress} />
     <main id="main" tabindex="-1">
       <slot />

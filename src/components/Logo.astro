@@ -1,0 +1,10 @@
+---
+// The mark: three requests stepping down a waterfall.
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+---
+<svg class:list={['logo', cls]} viewBox="0 0 40 32" aria-hidden="true">
+  <rect x="0" y="1" width="20" height="8" rx="4" fill="#9c8cff" />
+  <rect x="9" y="12" width="20" height="8" rx="4" fill="#ff8a1e" />
+  <rect x="18" y="23" width="22" height="8" rx="4" fill="#d7ec4a" />
+</svg>

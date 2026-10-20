@@ -1,7 +1,7 @@
 // The concept's driver: the browser's own Resource Timing entries, drawn as a network waterfall.
 // One source (performance entries + elapsed time since load) feeds every visual that carries the
-// concept: the loader table, the hero table, the hero's "Loaded in" line, the footer colophon and
-// the open "you" row that keeps growing while the visitor stays (the idle state).
+// concept: the live table, the hero's load-time pill and stat cards, the footer colophon and the
+// open "you" row that keeps growing while the visitor stays (the idle state).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ease, onPage, prefersReducedMotion } from '../engine';
@@ -59,7 +59,7 @@ function softLoad(base: Row[]): Row[] {
   return [doc, ...base.filter((r) => r.key !== 'doc').map((r) => ({ ...r, size: 'memory', start: net.ms, end: net.ms, bytes: 0 }))];
 }
 
-let firstLoadEnd = Infinity; // set when the loader finishes; later entries are not part of the first load
+let firstLoadEnd = Infinity; // set after the load event; later entries are not part of the first load
 let baseRows: Row[] = [];
 let loadedAt = 0; // performance.now() when the current view finished loading
 
@@ -111,6 +111,7 @@ function draw(table: HTMLElement, rows: Row[], { open = false, animate = true } 
     if (!tr) {
       tr = document.createElement('tr');
       tr.dataset.key = r.key;
+      tr.dataset.type = r.type;
       body.insertBefore(tr, body.querySelector('.wf__you'));
       fresh.push(tr);
     }
@@ -131,69 +132,68 @@ function draw(table: HTMLElement, rows: Row[], { open = false, animate = true } 
 
 function writeSummary(rows: Row[], soft: boolean) {
   const { total, end, bytes } = summary(rows);
-  const loaded = document.querySelector<HTMLElement>('[data-loaded]');
-  if (loaded) {
-    loaded.textContent = soft
-      ? `Loaded in ${fmtMs(end)}. One request; the other ${total - 1} files were already here.`
-      : `Loaded in ${fmtMs(end)}: ${total} requests, ${kb(bytes)}.`;
-  }
+  const doc = rows[0];
+  const set = (sel: string, text: string) => document.querySelectorAll<HTMLElement>(sel).forEach((el) => (el.textContent = text));
+  set('[data-live-ms]', fmtMs(end));
+  set('[data-stat="ms"]', fmtMs(end));
+  set('[data-stat="req"]', soft ? '1' : String(total));
+  set('[data-stat="kb"]', soft ? (doc?.bytes ? kb(doc.bytes) : 'cache') : kb(bytes));
   const colophon = document.querySelector<HTMLElement>('[data-colophon]');
   if (colophon) colophon.textContent = soft ? `This page came over in ${fmtMs(end)}.` : `This page: ${total} requests, ${kb(bytes)}, ${fmtMs(end)}.`;
 }
 
 // ---------- lifecycle ----------
 
-/** During the loader: redraw every table as entries arrive. Returns a stop function. */
-export function streamWhileLoading() {
-  const tables = () => [...document.querySelectorAll<HTMLElement>('[data-waterfall]')];
-  let last = -1;
-  const tick = () => {
-    const rows = firstLoad();
-    if (rows.length === last) return;
-    last = rows.length;
-    tables().forEach((t) => draw(t, rows, { animate: t.dataset.waterfall === 'loader' }));
-  };
-  tick();
-  gsap.ticker.add(tick);
-  return () => {
-    gsap.ticker.remove(tick);
+/** The first load is over once the window has loaded; later entries (prefetches) are not part of it. */
+const firstLoadDone = new Promise<void>((resolve) => {
+  const done = () => setTimeout(() => {
     firstLoadEnd = performance.now();
     baseRows = firstLoad();
     loadedAt = performance.now();
-    tables().forEach((t) => draw(t, baseRows, { open: t.dataset.waterfall === 'hero', animate: t.dataset.waterfall === 'hero' }));
-    writeSummary(baseRows, false);
-  };
-}
+    resolve();
+  }, 60);
+  if (document.readyState === 'complete') done();
+  else addEventListener('load', done, { once: true });
+});
 
-/** The open row: the visit is a request that has not finished. Grows on the ticker while in view. */
+/** Fill the live table, the stat cards and the colophon; the open "you" row grows while in view. */
 export function startWaterfall() {
   onPage(() => {
-    if (net.navigated) {
-      // soft navigation: this view's load is the fetch the adapter measured
-      loadedAt = performance.now();
-      const rows = softLoad(baseRows);
-      document.querySelectorAll<HTMLElement>('[data-waterfall="hero"]').forEach((t) => draw(t, rows, { open: true }));
-      writeSummary(rows, true);
-    } else if (baseRows.length) {
-      writeSummary(baseRows, false);
-    }
-    const hero = document.querySelector<HTMLElement>('[data-waterfall="hero"]');
-    if (!hero || prefersReducedMotion()) return;
+    let alive = true;
+    const table = document.querySelector<HTMLElement>('[data-waterfall="hero"]');
+    const render = () => {
+      if (!alive) return;
+      const soft = net.navigated;
+      if (soft) loadedAt = performance.now();
+      const rows = soft ? softLoad(baseRows) : baseRows;
+      writeSummary(rows, soft);
+      if (!table) return;
+      draw(table, rows, { open: true, animate: false });
+      if (prefersReducedMotion()) return;
+      // bars stream in when the table scrolls into view
+      const bars = table.querySelectorAll('.wf__bar');
+      gsap.set(bars, { scaleX: 0, transformOrigin: '0% 50%' });
+      ScrollTrigger.create({ trigger: table, start: 'top 85%', once: true, onEnter: () => gsap.to(bars, { scaleX: 1, duration: 0.9, ease: ease.out, stagger: 0.05 }) });
+    };
+    if (net.navigated) render();
+    else firstLoadDone.then(render);
+
+    if (!table || prefersReducedMotion()) return () => { alive = false; };
     const tick = () => {
-      const bar = hero.querySelector<HTMLElement>('[data-you-bar]');
-      const time = hero.querySelector<HTMLElement>('[data-you-time]');
+      const bar = table.querySelector<HTMLElement>('[data-you-bar]');
+      const time = table.querySelector<HTMLElement>('[data-you-time]');
       if (!bar || !time || !loadedAt) return;
       const s = (performance.now() - loadedAt) / 1000;
       gsap.set(bar, { scaleX: 1 - Math.exp(-s / 45) }); // eases toward the edge, never reaches it
-      time.textContent = clock(performance.now()); // same clock as the header: the whole visit
+      time.textContent = clock(performance.now());
     };
     const st = ScrollTrigger.create({
-      trigger: hero,
+      trigger: table,
       start: 'top bottom',
       end: 'bottom top',
       onToggle: (self) => (self.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)),
     });
     if (st.isActive) gsap.ticker.add(tick);
-    return () => gsap.ticker.remove(tick);
+    return () => { alive = false; gsap.ticker.remove(tick); };
   });
 }

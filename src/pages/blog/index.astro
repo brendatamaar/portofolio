@@ -14,6 +14,6 @@ const total = posts.reduce((n, p) => n + words(p), 0);
     <p class="blog-head__count mono" data-reveal="fade" data-intro data-delay="0.5">{posts.length} posts, {total.toLocaleString('en-US')} words. <a class="arrow-link" href="/rss.xml"><span>RSS feed</span><span class="arrow" aria-hidden="true">→</span></a></p>
   </section>
   <section class="blog-list" aria-label="All posts">
-    <PostList posts={posts} full headingLevel={2} />
+    <PostList posts={posts} headingLevel={2} />
   </section>
 </Base>

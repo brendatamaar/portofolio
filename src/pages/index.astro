@@ -1,59 +1,252 @@
 ---
 import Base from '../layouts/Base.astro';
 import Waterfall from '../components/Waterfall.astro';
-import WorkIndex from '../components/WorkIndex.astro';
-import PostList from '../components/PostList.astro';
-import { site, statement, about } from '../data/site';
-import { allPosts } from '../lib/posts';
-const [first, last] = site.name.split(' ');
-const posts = (await allPosts()).slice(0, 3);
+import Sticker from '../components/Sticker.astro';
+import Logo from '../components/Logo.astro';
+import { site, about, services, method, faq, projects } from '../data/site';
+import { allPosts, isoDate, minutes } from '../lib/posts';
+const posts = await allPosts();
+const [lead, ...rest] = posts;
+const tones = ['orange', 'lavender', 'green', 'coral'] as const;
 ---
 <Base current="home">
-  <section class="hero" aria-labelledby="hero-name">
-    <h1 id="hero-name" class="hero__name" data-split="words" data-intro>
-      <span class="hero__line">{first}</span>
-      <span class="hero__line hero__line--2">{last}</span>
+  <!-- Hero -->
+  <section class="hero band band--navy" aria-labelledby="hero-title">
+    <p class="hero__eyebrow" data-reveal="fade" data-intro><span class="hero__heart" aria-hidden="true">●</span> {site.name}, web software developer</p>
+    <h1 id="hero-title" class="hero__title display">
+      <span class="hero__line" style="--i:0">Web apps that</span>
+      <span class="hero__line" style="--i:1"><span class="ink-lavender">load</span> <span class="hero__live" aria-hidden="true" data-pop><span class="hero__live-dot"></span><span data-live-ms>live</span></span> <span class="ink-orange">fast</span></span>
+      <span class="hero__line" style="--i:2">on bad Wi-Fi too</span>
     </h1>
-    <div class="hero__meta">
-      <p class="hero__intro" data-split="lines" data-intro data-delay="0.35"><strong>{site.role}.</strong> {site.intro}</p>
-      <p class="hero__loaded mono" data-loaded aria-live="off"></p>
+    <p class="hero__sub" data-reveal="fade" data-intro data-delay="0.35">I build the whole thing, from the database to the button, and I test it on a slow phone before I call it done.</p>
+    <div class="hero__ctas" data-reveal="fade" data-intro data-delay="0.45">
+      <a class="pill pill--light" href={`mailto:${site.email}`}><span>Email me</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+      <a class="pill pill--ghost" href="#work"><span>See the work</span><span class="pill__arrow" aria-hidden="true">↓</span></a>
     </div>
-    <Waterfall variant="hero" />
+
+    <Sticker kind="squiggle" color="#ff8a1e" class="hero__s1" />
+    <Sticker kind="badge" class="hero__s2" />
+    <Sticker kind="sparkle" color="#e9ecf5" class="hero__s3" />
+    <Sticker kind="star" color="#d7ec4a" class="hero__s4" />
+    <Sticker kind="sparkle" color="#9c8cff" class="hero__s5" />
+
+    <div class="hero__foot">
+      <div class="hero__claim">
+        <div class="tags" aria-hidden="true">
+          <span class="tag tag--orange" data-pop style="--r:-8deg">200 OK</span>
+          <span class="tag tag--coral" data-pop style="--r:4deg">cache hit</span>
+          <span class="tag tag--lime" data-pop style="--r:-3deg">0 layout shift</span>
+        </div>
+        <p class="hero__claim-text">This page measured itself. <span>Every request it took to reach you is listed below, live.</span></p>
+      </div>
+      <a class="stat stat--green bite" href="#live" style="--bite: var(--c-navy)">
+        <span class="stat__num" data-stat="req">live</span>
+        <span class="stat__label">requests to load this page</span>
+        <span class="bite__btn" aria-hidden="true">↗</span>
+      </a>
+      <a class="stat stat--lime bite" href="#live" style="--bite: var(--c-navy)">
+        <span class="stat__num" data-stat="kb">live</span>
+        <span class="stat__label">transferred, on your connection</span>
+        <span class="bite__btn" aria-hidden="true">↗</span>
+      </a>
+    </div>
   </section>
 
-  <section class="statement" aria-label="How I work">
-    <p class="statement__text" data-reveal="up">
-      {statement.text} This is <a class="link" href={statement.link.href}>{statement.link.label}</a>.
-    </p>
+  <!-- Services -->
+  <section class="section" id="services" aria-labelledby="services-title">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow">What I do</p>
+        <h2 id="services-title" class="display section__title" data-split="lines">Work that makes slow apps fast</h2>
+      </div>
+      <p class="section__note">Six kinds of work I take on, each linked to a project or a post that shows how I do it.</p>
+    </div>
+    <ul class="cards">
+      {services.map((s, i) => (
+        <li data-reveal="up" data-delay={String((i % 3) * 0.06)}>
+          <a class={`card card--${s.tone} bite`} href={s.href}>
+            <h3 class="card__title display">{s.title}</h3>
+            <p class="card__text">{s.text}</p>
+            <span class="card__cta">{s.cta}</span>
+            <span class="bite__btn" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
   </section>
 
-  <WorkIndex />
-
-  <section class="log" aria-labelledby="log-title">
-    <div class="log__head">
-      <h2 id="log-title" class="section-title" data-split="lines">Blog</h2>
-      <p class="log__note">Notes on fast pages and boring, reliable back ends.</p>
-      <a class="arrow-link" href="/blog/"><span>All posts</span><span class="arrow" aria-hidden="true">→</span></a>
+  <!-- Live waterfall -->
+  <section class="section live" id="live" aria-labelledby="live-title">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow">Live, from your browser</p>
+        <h2 id="live-title" class="display section__title" data-split="lines">Every request this page made</h2>
+      </div>
+      <p class="section__note">Network tools color requests by type. So does this site: the colors on every card are the legend below. The numbers are yours, read from your browser just now.</p>
     </div>
-    <div class="log__list">
-      <PostList posts={posts} />
+    <div class="live__stage">
+      <div class="live__card bite" style="--bite: var(--c-bg)" data-reveal="up">
+        <Waterfall />
+        <span class="bite__btn bite__btn--static" aria-hidden="true"><span class="live__pulse"></span></span>
+      </div>
+      <p class="live__float live__float--a" data-pop><span class="stat__num" data-stat="ms">live</span><span>to load, end to end</span></p>
+      <p class="live__float live__float--b" data-pop><span class="stat__num" data-visit>open</span><span>you, still connected</span></p>
     </div>
   </section>
 
-  <section class="about" id="about" aria-labelledby="about-title">
-    <h2 id="about-title" class="section-title" data-split="lines">About</h2>
-    <div class="about__bio">
+  <!-- Method -->
+  <section class="section" aria-labelledby="method-title">
+    <div class="section__head section__head--single">
+      <p class="eyebrow">How I work</p>
+      <h2 id="method-title" class="display section__title" data-split="lines">Four steps, in this order</h2>
+    </div>
+    <ol class="steps">
+      {method.map((m, i) => (
+        <li class="step">
+          <details class:list={['step__details', { 'step__details--first': i === 0 }]} open={i === 0}>
+            <summary class="step__summary">
+              <span class="step__n display">{i + 1}.</span>
+              <span class="step__title display">{m.title}</span>
+              <span class="step__text">{m.text}</span>
+              <span class="step__toggle" aria-hidden="true"></span>
+            </summary>
+            {m.columns.length > 0 && (
+              <div class="step__cols">
+                {m.columns.map((c) => (
+                  <div class="step__col">
+                    <p class="step__col-title">{c.title}</p>
+                    <p class="step__col-sub">{c.sub}</p>
+                    <ul class="chips">{c.chips.map((ch) => <li class={`chip chip--${ch.tone}`}>{ch.label}</li>)}</ul>
+                  </div>
+                ))}
+              </div>
+            )}
+          </details>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Statement band -->
+  <section class="section" aria-label="Principles">
+    <div class="banner bite" style="--bite: var(--c-bg)" data-reveal="up">
+      <span class="tag tag--orange banner__t1" data-pop style="--r:-6deg" aria-hidden="true">no spinner theatre</span>
+      <span class="tag tag--green banner__t2" data-pop style="--r:5deg" aria-hidden="true">real devices</span>
+      <span class="tag tag--coral banner__t3" data-pop style="--r:-4deg" aria-hidden="true">budgets on deploy</span>
+      <p class="banner__text display">Fast by default. Accessible by habit. Boring to run.</p>
+      <p class="banner__note">Speed is a property of the request, not a coat of paint at the end. I design for it from the first commit.</p>
+      <Logo class="banner__logo" />
+      <Sticker kind="sparkle" color="#0e1a2b" class="banner__s1" />
+      <Sticker kind="star" color="#ff8a1e" class="banner__s2" />
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section class="section" id="work" aria-labelledby="work-title">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2 id="work-title" class="display section__title" data-split="lines">Featured projects</h2>
+      </div>
+      <div class="rail__ctrl">
+        <button class="round" type="button" data-rail-prev aria-label="Previous projects">←</button>
+        <button class="round" type="button" data-rail-next aria-label="Next projects">→</button>
+      </div>
+    </div>
+    <ul class="rail" data-rail>
+      {projects.map((p, i) => (
+        <li class="proj" data-reveal="up" data-delay={String(i * 0.06)}>
+          <a class="proj__link" href={`/work/${p.slug}/`}>
+            <span class={`proj__cover cover--${tones[i % tones.length]} bite`} style="--bite: var(--c-bg)" aria-hidden="true">
+              <span class="proj__bars">
+                {p.path.map((s, j) => <span class="proj__bar" style={`--j:${j}`}><span>{s.name}</span></span>)}
+              </span>
+              <span class="proj__year mono">{p.year}</span>
+              <span class="bite__btn">↗</span>
+            </span>
+            <span class="proj__title display">{p.title}</span>
+            <span class="proj__kind">{p.kind}. {p.client}.</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- About -->
+  <section class="section about" id="about" aria-labelledby="about-title">
+    <div class="about__card bite" style="--bite: var(--c-bg)" data-reveal="up">
+      <Sticker kind="bolt" color="#d7ec4a" class="about__s1" />
+      <p class="eyebrow eyebrow--light">About</p>
+      <h2 id="about-title" class="display about__title" data-split="lines">Hi, I’m Brendatama</h2>
+    </div>
+    <div class="about__body">
       {about.bio.map((p) => <p>{p}</p>)}
+      <ul class="chips chips--lg" aria-label="Tools I use">
+        {about.tools.map((t, i) => <li class={`chip chip--${(['lime', 'lavender', 'orange', 'green', 'coral'] as const)[i % 5]}`}>{t}</li>)}
+      </ul>
     </div>
-    <div class="about__lists">
+  </section>
+
+  <!-- Blog -->
+  <section class="section" aria-labelledby="blog-title">
+    <div class="section__head">
       <div>
-        <h3 class="about__h">What I do</h3>
-        <ul>{about.services.map((s) => <li>{s}</li>)}</ul>
+        <p class="eyebrow">From the blog</p>
+        <h2 id="blog-title" class="display section__title" data-split="lines">Notes from the network tab</h2>
       </div>
-      <div>
-        <h3 class="about__h">What I use</h3>
-        <ul class="about__tools">{about.tools.map((s) => <li>{s}</li>)}</ul>
+      <a class="pill pill--dark" href="/blog/"><span>All posts</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+    </div>
+    <div class="blogs">
+      <div data-reveal="up">
+      <a class="feature bite" href={`/blog/${lead.id}/`} style="--bite: var(--c-bg)">
+        <span class="tag tag--lime feature__tag" style="--r:-4deg">Latest</span>
+        <span class="feature__meta mono">{isoDate(lead.data.date)}, {minutes(lead)} min read</span>
+        <span class="feature__title display">{lead.data.title}</span>
+        <span class="feature__desc">{lead.data.description}</span>
+        <span class="bite__btn" aria-hidden="true">↗</span>
+      </a>
       </div>
+      <ul class="minis">
+        {rest.map((p) => (
+          <li data-reveal="up">
+            <a class="mini" href={`/blog/${p.id}/`}>
+              <span class="mini__meta mono">{isoDate(p.data.date)}, {minutes(p)} min read</span>
+              <span class="mini__title">{p.data.title}</span>
+              <span class="mini__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq" aria-labelledby="faq-title">
+    <div class="faq__head">
+      <h2 id="faq-title" class="display section__title" data-split="lines">Your questions answered</h2>
+      <p class="section__note">Still unsure? Email me with a link and what is going wrong. A short answer costs nothing.</p>
+    </div>
+    <div class="faq__list">
+      {faq.map((f) => (
+        <details class="qa">
+          <summary class="qa__q"><span class="qa__icon" aria-hidden="true"></span><span>{f.q}</span></summary>
+          <p class="qa__a">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" aria-labelledby="cta-title">
+    <div class="cta bite" style="--bite: var(--c-bg)">
+      <span class="tag tag--lime cta__t1" data-pop style="--r:-5deg" aria-hidden="true">replies in two days</span>
+      <span class="tag tag--coral cta__t2" data-pop style="--r:6deg" aria-hidden="true">new work 2027</span>
+      <Sticker kind="squiggle" color="#ff8a1e" class="cta__s1" style="--r:20deg" />
+      <Sticker kind="sparkle" color="#d7ec4a" class="cta__s2" />
+      <Sticker kind="star" color="#9c8cff" class="cta__s3" />
+      <h2 id="cta-title" class="display cta__title" data-split="lines">Ready to make your <span class="ink-lavender">app</span> <span class="ink-orange">fast</span>?</h2>
+      <p class="cta__note">{site.availability}</p>
+      <a class="pill pill--light" href={`mailto:${site.email}`}><span>Email me</span><span class="pill__arrow" aria-hidden="true">→</span></a>
     </div>
   </section>
 </Base>

@@ -26,6 +26,7 @@ const schema = {
 ---
 <Base title={post.data.title} description={post.data.description} type="article" current="blog" progress schema={schema}>
   <article class="post">
+    <div class="post__head-band">
     <header class="post__head">
       <p class="post__meta mono">
         <time datetime={post.data.date.toISOString()} title={longDate(post.data.date)}>{isoDate(post.data.date)}</time>
@@ -38,6 +39,7 @@ const schema = {
         <ul class="post__tags mono" aria-label="Tags">{post.data.tags.map((t) => <li>{t}</li>)}</ul>
       )}
     </header>
+    </div>
     <div class="prose">
       <Content />
     </div>

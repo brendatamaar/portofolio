@@ -1,12 +1,8 @@
 ---
 // A network waterfall of the page you are on. Rows come from the browser's own Resource Timing
 // entries (src/motion/waterfall.ts); nothing here is invented. Without JavaScript it explains itself.
-interface Props {
-  variant: 'hero' | 'loader';
-}
-const { variant } = Astro.props;
 ---
-<figure class:list={['wf', `wf--${variant}`]} data-waterfall={variant} aria-hidden={variant === 'loader' ? 'true' : undefined}>
+<figure class="wf" data-waterfall="hero">
   <table class="wf__table">
     <caption class="sr-only">Requests your browser made to load this page</caption>
     <thead>
@@ -27,4 +23,12 @@ const { variant } = Astro.props;
       </tr>
     </tbody>
   </table>
+  <figcaption class="wf__legend" aria-hidden="true">
+    <span class="chip chip--orange">document</span>
+    <span class="chip chip--lavender">stylesheet</span>
+    <span class="chip chip--lime">script</span>
+    <span class="chip chip--coral">font</span>
+    <span class="chip chip--green">image</span>
+    <span class="chip chip--stripe">you</span>
+  </figcaption>
 </figure>

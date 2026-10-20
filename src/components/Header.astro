@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site';
+import Logo from './Logo.astro';
 import type { Current } from '../layouts/Base.astro';
 interface Props {
   current: Current;
@@ -12,24 +13,21 @@ const links = [
   { label: 'About', href: '/#about', key: 'about' },
 ];
 ---
-<header class="frame">
-  <a class="frame__mark" href="/" aria-current={current === 'home' ? 'page' : undefined}>
-    <span class="frame__mark-short" aria-hidden="true">{site.short}</span>
-    <span class="frame__mark-full">{site.name}</span>
-  </a>
-  <span class="frame__visit mono" transition:persist="visit" aria-hidden="true">
-    <span class="frame__pending" data-pending></span>
-    <span data-visit>connected</span>
-  </span>
-  <nav class="frame__nav" aria-label="Main">
-    <ul>
-      {links.map((l) => (
-        <li>
-          <a class="nav-link" href={l.href} aria-current={current === l.key ? 'page' : undefined}>{l.label}</a>
-        </li>
-      ))}
-      <li><a class="nav-link" href={`mailto:${site.email}`}>Email</a></li>
-    </ul>
-  </nav>
-  {progress && <span class="frame__progress" aria-hidden="true"><span data-progress></span></span>}
+<header class="nav">
+  <div class="nav__bar">
+    <a class="nav__brand" href="/" aria-current={current === 'home' ? 'page' : undefined}>
+      <Logo />
+      <span class="nav__word">Brendatama</span>
+      <span class="sr-only"> Akbar, home</span>
+    </a>
+    <nav class="nav__links" aria-label="Main">
+      <ul>
+        {links.map((l) => (
+          <li><a class="nav-link" href={l.href} aria-current={current === l.key ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="pill pill--light nav__cta" href={`mailto:${site.email}`}><span>Email me</span><span class="pill__arrow" aria-hidden="true">→</span></a>
+    {progress && <span class="nav__progress" aria-hidden="true"><span data-progress></span></span>}
+  </div>
 </header>

@@ -1,5 +1,17 @@
 # Brendatama Akbar: design notes
 
+> **Current style (v2, October 2026):** restyled after the owner pointed at a colorful Framer
+> template (navy hero, condensed uppercase display, multi-color headline words, bento cards in
+> saturated colors with a bitten corner, tilted pill tags, stickers, accordion, FAQ, CTA card,
+> giant footer wordmark). The concept below is unchanged: the site still shows its own network
+> waterfall. What changed is the look, and the bridge is honest: network tools color requests by
+> type, so the card colors are the waterfall legend (document orange, stylesheet lavender, script
+> lime, font coral, image green). The full-screen loader is gone; the waterfall lives in its own
+> section and the hero's live pill shows the real load time. See "v2 system" at the end.
+>
+> The sections between here and "v2 system" describe v1 (the light network panel) and are kept
+> for history.
+
 ## Brief
 
 - **Subject:** Brendatama Akbar, web software developer (front end through back end).
@@ -148,3 +160,24 @@ POST /blog/x     narrow measure col 4-10, header shows words + minutes; reading 
   visitor already waited.
 - Size and time in the waterfall are whatever the browser reports. The QA server sent JS
   uncompressed at first (155 kB); a gzip host sends 57 kB and the table shows that.
+
+## v2 system
+
+**Palette:** navy `#0e1a2b` (hero bands, dark cards), white ground, raised `#f3f4f8`, muted
+`#5b6577` (5.9:1 on white) and `#a9b3c7` on navy (8.3:1). Type colors: orange `#ff8a1e`,
+lavender `#9c8cff`, coral `#ff5b3a`, green `#21b47d`, lime `#d7ec4a`. Text on every colored card is
+navy (5.7 to 13.3:1); white text only on navy. Eyebrows are `#c4351a` (5.4:1).
+
+**Type:** Archivo at width 62%, weight 850, uppercase for every display line; body Archivo at
+width 100; JetBrains Mono only for machine values (ms, kB, dates, the live pill).
+
+**Shape:** cards 1.5rem radius with the bitten top-right corner (`.bite`) that holds a round
+arrow button; pills fully round; tags tilted with a 2px navy outline.
+
+**Motion verb:** pop and lift. Stickers and tags pop on with a spring (scale only, so each keeps
+its tilt); cards lift 6px and tilt -0.6deg on hover while the arrow turns 45 degrees; pill arrows
+travel; navigation is four type-colored bands streaming in like waterfall rows, then the real
+status and fetch time. Idle: the badge's ring turns, the "you" row grows and its clock ticks.
+
+**Not copied from the reference:** stock photos, testimonials and invented stats. The stat cards
+show this page's real request count and transfer size.

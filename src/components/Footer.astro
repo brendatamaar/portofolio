@@ -1,24 +1,31 @@
 ---
 import { site } from '../data/site';
+import Logo from './Logo.astro';
 const year = new Date().getFullYear();
+const links = [
+  { label: 'Work', href: '/#work' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'About', href: '/#about' },
+  { label: 'Email me', href: `mailto:${site.email}` },
+];
 ---
 <footer class="footer" id="contact">
-  <div class="footer__lead">
-    <h2 class="footer__title">Have a slow page or a new app?</h2>
-    <p class="footer__note">{site.availability}</p>
+  <div class="footer__top">
+    <div class="footer__brand">
+      <p class="footer__word" aria-hidden="true"><Logo class="footer__logo" /><span>Brendatama</span></p>
+      <p class="footer__about">{site.name}, web software developer. Fast web apps for slow phones and bad connections, built and measured end to end.</p>
+      <ul class="footer__social">
+        {site.socials.map((s) => <li><a class="utility" href={s.href} rel={s.href.startsWith('http') ? 'me noopener' : undefined}>{s.label}</a></li>)}
+      </ul>
+    </div>
+    <nav class="footer__nav" aria-label="Footer">
+      <ul>
+        {links.map((l) => <li><a class="footer__link" href={l.href}><span class="footer__bullet" aria-hidden="true">›</span><span>{l.label}</span></a></li>)}
+      </ul>
+    </nav>
   </div>
-  <a class="cta" href={`mailto:${site.email}`}>
-    <span class="cta__fill" aria-hidden="true"></span>
-    <span class="cta__label">Email me</span>
-    <span class="cta__addr mono">{site.email}</span>
-  </a>
   <div class="footer__base">
-    <ul class="footer__social">
-      {site.socials.map((s) => <li><a class="utility" href={s.href} rel={s.href.startsWith('http') ? 'me noopener' : undefined}>{s.label}</a></li>)}
-    </ul>
-    <p class="footer__colophon">
-      Set in Archivo and JetBrains Mono. Built with Astro.{' '}<span data-colophon></span>
-    </p>
-    <p class="footer__copy">© {year} {site.name}</p>
+    <p>© {year} {site.name}</p>
+    <p class="footer__colophon">Set in Archivo and JetBrains Mono. Built with Astro.{' '}<span data-colophon></span></p>
   </div>
 </footer>
