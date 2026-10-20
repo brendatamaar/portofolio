@@ -22,7 +22,19 @@ export function setupMotion() {
 // table travels down into the hero, where the same rows are waiting; elsewhere it streams out.
 function loader() {
   setLoaderFormat(() => `${String(Math.round(performance.now())).padStart(4, '0')} ms`);
+  const path = document.querySelector('[data-loader-path]');
+  if (path) path.textContent = location.pathname;
   const stop = streamWhileLoading();
+  // Once per session: a reload or a second tab goes straight to the page, and the hero table
+  // replays the rows in place instead.
+  let seen = false;
+  try { seen = sessionStorage.getItem('wf-seen') === '1'; sessionStorage.setItem('wf-seen', '1'); } catch {}
+  if (seen) {
+    document.getElementById('loader')?.remove();
+    document.documentElement.classList.add('is-loaded');
+    document.fonts.ready.then(stop);
+    return;
+  }
   document.addEventListener('loader:done', stop, { once: true });
   setLoaderExit((root) => {
     const from = root.querySelector<HTMLElement>('.loader__wf');
@@ -31,11 +43,12 @@ function loader() {
     tl.to(root.querySelectorAll('[data-loader-out]'), { autoAlpha: 0, y: -12, duration: 0.35, ease: ease.soft, stagger: 0.04 }, 0);
     if (from && to) {
       const dy = to.getBoundingClientRect().top - from.querySelector('.wf')!.getBoundingClientRect().top;
-      tl.to(from, { y: dy, duration: 0.75, ease: ease.inOut }, 0)
-        .to(root, { backgroundColor: 'rgb(233 235 238 / 0)', duration: 0.4, ease: ease.soft }, 0.35);
+      tl.to(from, { y: dy, duration: 0.65, ease: ease.inOut }, 0)
+        .to(root, { backgroundColor: 'rgb(233 235 238 / 0)', duration: 0.35, ease: ease.soft }, 0.3);
     } else {
-      tl.to(root, { clipPath: 'inset(0% 0% 0% 100%)', duration: 0.75, ease: ease.inOut }, 0.05);
+      tl.to(root, { clipPath: 'inset(0% 0% 0% 100%)', duration: 0.65, ease: ease.inOut }, 0.05);
     }
+    if (performance.now() > 1500) tl.timeScale(1.6); // the visitor already waited on the network
     return tl;
   });
 }
@@ -58,10 +71,12 @@ function transition() {
       status.textContent = 'pending';
       gsap.set(bar, { scaleX: 0, transformOrigin: '0% 50%' });
       crawl = gsap.to(bar, { scaleX: 0.85, duration: 2, ease: 'power2.out', delay: 0.3 }); // honest: it waits for the fetch
+      document.documentElement.classList.add('is-navigating');
       return gsap.timeline()
         .set(c, { autoAlpha: 1 })
-        .fromTo(panel, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.7, ease: ease.inOut })
-        .fromTo(req, { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: 0.4, ease: ease.soft }, 0.3);
+        .set(req, { autoAlpha: 1 })
+        .fromTo(panel, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.7, ease: ease.inOut }, 0)
+        .fromTo(req, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.7, ease: ease.inOut }, 0);
     },
     enter: (c) => {
       const { panel, req, status, bar } = parts(c);
@@ -69,8 +84,10 @@ function transition() {
       status.textContent = `${statusOf(net.to)}  ${Math.max(1, Math.round(net.ms))} ms`;
       return gsap.timeline()
         .to(bar, { scaleX: 1, duration: 0.25, ease: ease.soft })
-        .to(req, { autoAlpha: 0, x: 16, duration: 0.3, ease: ease.soft }, '+=0.12')
-        .to(panel, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.75, ease: ease.inOut }, '<')
+        .addLabel('out', '+=0.12')
+        .to(req, { clipPath: 'inset(0% 0% 0% 100%)', duration: 0.75, ease: ease.inOut }, 'out')
+        .to(panel, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.75, ease: ease.inOut }, 'out')
+        .add(() => document.documentElement.classList.remove('is-navigating'))
         .set(c, { autoAlpha: 0 });
     },
   });
@@ -125,13 +142,13 @@ function workTimeline() {
     const bars = list.querySelectorAll('.row__bar');
     const text = list.querySelectorAll('.row__title, .row__meta, .row__year');
     gsap.set(bars, { scaleX: 0, transformOrigin: '0% 50%' });
-    gsap.set(text, { autoAlpha: 0, y: 14 });
+    gsap.set(text, { opacity: 0, y: 14 });
     ScrollTrigger.create({
       trigger: list,
       start: 'top 82%',
       once: true,
       onEnter: () => {
-        gsap.to(text, { autoAlpha: 1, y: 0, duration: 0.9, ease: ease.out, stagger: 0.04 });
+        gsap.to(text, { opacity: 1, y: 0, duration: 0.9, ease: ease.out, stagger: 0.04 });
         gsap.to(bars, { scaleX: 1, duration: 1.1, ease: ease.out, stagger: 0.09, delay: 0.15 });
       },
     });
@@ -147,14 +164,14 @@ function requestPath() {
       const bar = stage.querySelector('.path__bar');
       const text = stage.querySelectorAll('.path__n, .path__name, .path__text');
       gsap.set(bar, { scaleX: 0, transformOrigin: '0% 50%' });
-      gsap.set(text, { autoAlpha: 0, x: -12 });
+      gsap.set(text, { opacity: 0, x: -12 });
       ScrollTrigger.create({
         trigger: stage,
         start: 'top 85%',
         once: true,
         onEnter: () => {
           gsap.to(bar, { scaleX: 1, duration: 1, ease: ease.out });
-          gsap.to(text, { autoAlpha: 1, x: 0, duration: 0.8, ease: ease.out, stagger: 0.05, delay: 0.1 });
+          gsap.to(text, { opacity: 1, x: 0, duration: 0.8, ease: ease.out, stagger: 0.05, delay: 0.1 });
         },
       });
     });

@@ -11,7 +11,7 @@ let exit: ((root: HTMLElement) => gsap.core.Timeline) | null = null;
 /** Replace the exit choreography (the loader → hero handoff). Return a timeline. */
 export const setLoaderExit = (fn: (root: HTMLElement) => gsap.core.Timeline) => { exit = fn; };
 
-const MIN = 0.8; // seconds: long enough to read the rows as they land
+const MIN = 0.6; // seconds: long enough to read the rows as they land
 const MAX = 2.6; // seconds: a longer loader is a usability problem
 
 function criticalAssets(): Promise<unknown>[] {
@@ -42,8 +42,8 @@ export async function runLoader(): Promise<void> {
     const tick = () => {
       const elapsed = (performance.now() - start) / 1000;
       const timeCap = Math.min(100, (elapsed / floor) * 100); // never faster than the floor
-      const goal = elapsed > MAX ? 100 : Math.min(target.v, timeCap);
-      shown.v += (goal - shown.v) * Math.min(1, 0.16 * gsap.ticker.deltaRatio());
+      const goal = elapsed > (start > 1200 ? 0.6 : MAX) ? 100 : Math.min(target.v, timeCap); // slow boot: stop waiting on fonts sooner
+      shown.v += (goal - shown.v) * (start > 1200 ? 1 : Math.min(1, 0.16 * gsap.ticker.deltaRatio())); // slow boot: no easing
       if (goal === 100 && shown.v > 99.5) shown.v = 100;
       if (count) count.textContent = format(shown.v);
       if (bar) bar.style.transform = `scaleX(${shown.v / 100})`;

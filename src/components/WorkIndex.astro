@@ -18,7 +18,7 @@ const pos = (y: number) => ((y - timeline.from) / span).toFixed(4);
     {projects.map((p) => (
       <li class="row">
         <a class="row__link" href={`/work/${p.slug}/`}>
-          <span class="row__title">{p.title}</span>
+          <span class="row__title"><span>{p.title}</span></span>
           <span class="row__meta">
             <span class="row__kind">{p.kind}</span>
             <span class="row__client">{p.client}</span>
@@ -29,12 +29,13 @@ const pos = (y: number) => ((y - timeline.from) / span).toFixed(4);
             </span>
             <span class="row__year mono" style={`--x:${pos(p.span[1])}`}>{p.year}</span>
           </span>
+          <span class="row__line" aria-hidden="true"></span>
         </a>
       </li>
     ))}
     <li class="row row--open">
       <a class="row__link" href={`mailto:${site.email}`}>
-        <span class="row__title">Your project</span>
+        <span class="row__title"><span>Your project</span></span>
         <span class="row__meta">
           <span class="row__kind">Pending</span>
           <span class="row__client">{site.availability.split('.')[0]}</span>
@@ -44,6 +45,7 @@ const pos = (y: number) => ((y - timeline.from) / span).toFixed(4);
             <span class="row__fill"></span>
           </span>
         </span>
+        <span class="row__line" aria-hidden="true"></span>
       </a>
     </li>
   </ol>

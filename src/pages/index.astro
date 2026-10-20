@@ -10,7 +10,7 @@ const posts = (await allPosts()).slice(0, 3);
 ---
 <Base current="home">
   <section class="hero" aria-labelledby="hero-name">
-    <h1 id="hero-name" class="hero__name" data-split="chars" data-intro>
+    <h1 id="hero-name" class="hero__name" data-split="words" data-intro>
       <span class="hero__line">{first}</span>
       <span class="hero__line hero__line--2">{last}</span>
     </h1>
@@ -22,7 +22,7 @@ const posts = (await allPosts()).slice(0, 3);
   </section>
 
   <section class="statement" aria-label="How I work">
-    <p class="statement__text" data-split="lines">
+    <p class="statement__text" data-reveal="up">
       {statement.text} This is <a class="link" href={statement.link.href}>{statement.link.label}</a>.
     </p>
   </section>

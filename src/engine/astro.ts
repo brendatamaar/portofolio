@@ -20,13 +20,14 @@ export function start(setup?: () => void) {
   document.addEventListener('astro:after-swap', () => {
     syncFlags(); // Astro replaces <html> attributes; restore flags before paint
     document.documentElement.classList.add('is-loaded');
+    if (document.querySelector('#curtain')) document.documentElement.classList.add('is-navigating'); // swap resets <html> classes mid-transition
     document.getElementById('loader')?.remove(); // the loader is first-load only
   });
   document.addEventListener('astro:page-load', () => {
     if (!navigating) return void boot(setup); // first load (boot is idempotent)
     navigating = false;
     net.navigated = true;
-    enter();
+    enter().then(() => document.documentElement.classList.remove('is-navigating'));
   });
   // Module scripts run after parsing: boot now instead of waiting for the first astro:page-load.
   boot(setup);
