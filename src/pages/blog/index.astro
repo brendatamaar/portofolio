@@ -11,7 +11,7 @@ const total = posts.reduce((n, p) => n + words(p), 0);
     <p class="blog-head__intro" data-split="lines" data-intro data-delay="0.3">
       Notes from building web applications: how pages load, how data stays where it belongs, and how to keep an interface honest about what the server said.
     </p>
-    <p class="blog-head__count mono" data-reveal="fade" data-intro data-delay="0.5">{posts.length} posts, {total.toLocaleString('en-US')} words. <a class="utility" href="/rss.xml">RSS feed</a></p>
+    <p class="blog-head__count mono" data-reveal="fade" data-intro data-delay="0.5">{posts.length} posts, {total.toLocaleString('en-US')} words. <a class="arrow-link" href="/rss.xml"><span>RSS feed</span><span class="arrow" aria-hidden="true">→</span></a></p>
   </section>
   <section class="blog-list" aria-label="All posts">
     <PostList posts={posts} full headingLevel={2} />

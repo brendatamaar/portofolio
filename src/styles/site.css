@@ -283,7 +283,11 @@ html.motion:not(.is-loaded) .wf--hero { opacity: 0; animation: safety 0s 5s forw
 .case__meta dd { margin: 0; }
 .case__flag { grid-column: 1 / -1; color: var(--c-muted); padding-left: 0.75rem; border-left: 2px solid var(--c-accent); }
 .case__section:has(+ .next) { border-bottom: 0; }
-.case__section, .case__path { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gutter); padding: calc(var(--u) * 8) var(--gutter); border-bottom: 1px solid var(--c-line); }
+/* The idea is the case study's statement: set across the grid, not in the text column. */
+.case__section--idea { row-gap: calc(var(--u) * 2.5); padding-block: calc(var(--u) * 10); }
+.case__section--idea .case__h { grid-column: 1 / -1; color: var(--c-accent); }
+.case__section--idea .case__text--big { grid-column: 1 / 12; font-size: clamp(1.9rem, 1rem + 3.2vw, 4.4rem); line-height: 1.04; letter-spacing: -0.035em; }
+.case__section, .case__path { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gutter); padding: calc(var(--u) * 6) var(--gutter); border-bottom: 1px solid var(--c-line); }
 .case__h { grid-column: 1 / 5; font-size: var(--t-m); font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
 .case__text { grid-column: 5 / 11; font-size: var(--t-m); line-height: 1.42; letter-spacing: -0.01em; }
 .case__text--big { font-size: var(--t-l); font-weight: 500; line-height: 1.15; letter-spacing: -0.025em; grid-column: 5 / -1; }
@@ -325,8 +329,8 @@ html.motion:not(.is-loaded) .wf--hero { opacity: 0; animation: safety 0s 5s forw
 .blog-head__title { grid-column: 1 / -1; font-size: 28cqi; margin-left: -0.06em; line-height: 0.8; letter-spacing: -0.025em; }
 .blog-head__intro { grid-column: 1 / 8; font-size: var(--t-m); line-height: 1.3; letter-spacing: -0.01em; max-width: 44ch; }
 .blog-head__count { grid-column: 9 / -1; align-self: end; color: var(--c-muted); }
-.blog-head__count a { margin-left: 0.5em; display: inline-block; padding-block: 0.3rem; }
-.blog-list { padding: 0 var(--gutter) calc(var(--u) * 10); }
+.blog-head__count a { margin-left: 0.75em; font-family: var(--f-body); font-size: var(--t-s); color: var(--c-fg); }
+.blog-list { padding: 0 var(--gutter) calc(var(--u) * 4); }
 
 /* ---------- Post ---------- */
 
