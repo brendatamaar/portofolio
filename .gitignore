@@ -4,3 +4,4 @@ dist/
 .shots/
 .DS_Store
 *.log
+preview/
