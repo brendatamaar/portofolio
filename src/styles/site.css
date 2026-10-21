@@ -203,7 +203,7 @@ html.frame-away .nav { translate: 0 -130%; }
 /* ---------- Live waterfall ---------- */
 
 .live__stage { position: relative; }
-.live__card { background: var(--c-navy); color: #fff; border-radius: 2rem; padding: clamp(1.25rem, 0.6rem + 2.4vw, 2.75rem); --bw: 4.2rem; --bh: 3.8rem; }
+.live__card { background: var(--c-navy); color: #fff; border-radius: 2rem; padding: clamp(1.25rem, 0.6rem + 2.4vw, 2.75rem); padding-top: calc(var(--bh) + 1rem); /* below the bitten corner, or it covers the axis's "now" */ --bw: 4.2rem; --bh: 3.8rem; }
 .live__pulse { width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--c-coral); box-shadow: 0 0 0 0.35rem rgb(255 91 58 / 0.25); }
 .live__float {
   position: absolute; z-index: 3; display: grid; gap: 0.35rem; padding: 1rem 1.2rem; border-radius: 1.1rem;
@@ -587,7 +587,7 @@ html.frame-away .nav { translate: 0 -130%; }
   .hero__s1, .hero__s2, .hero__s3, .hero__s4, .hero__s5 { display: none; }
   .stat { --bw: 3.3rem; --bh: 3.1rem; }
   .stat .bite__btn { width: 2.4rem; height: 2.4rem; }
-  .stat__num { font-size: 1.3rem; align-self: end; order: 2; }
+  .stat .stat__num { font-size: 1.3rem; align-self: end; order: 2; }
   .stat__label { padding-right: 2.6rem; }
   .hero__foot { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
   .stat { min-height: 8rem; padding: 1rem; }
